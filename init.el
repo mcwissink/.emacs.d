@@ -19,6 +19,8 @@
 
 (setq use-package-always-ensure t)
 
+(use-package hydra)
+
 (use-package
   editorconfig
   :config (editorconfig-mode 1))
@@ -26,6 +28,11 @@
 ;; Dark theme :)
 (use-package cherry-blossom-theme)
 (load-theme 'cherry-blossom t)
+
+;; IDO
+(setq ido-enable-flex-matching t)
+(setq ido-everywhere t)
+(ido-mode 1)
 
 ;; Other customization
 (tool-bar-mode -1)

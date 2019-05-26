@@ -6,9 +6,9 @@
 (package-initialize)
 
 (require 'package)
-(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ("melpa" . "https://melpa.org/packages/")
-			 ("melpa-stable" . "https://stable.melpa.org/packages/")))
+(setq package-archives
+  '(("gnu" . "https://elpa.gnu.org/packages/")
+     ("melpa" . "https://melpa.org/packages/")))
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -18,17 +18,14 @@
   (require 'use-package))
 
 (setq use-package-always-ensure t)
-(setq use-package-always-pin "melpa-stable")
 
 (use-package
   editorconfig
   :config (editorconfig-mode 1))
 
 ;; Dark theme :)
-(load-theme 'manoj-dark)
-
-;; Key bindings
-(global-set-key (kbd "C-z") 'shell)
+(use-package cherry-blossom-theme)
+(load-theme 'cherry-blossom t)
 
 ;; Other customization
 (tool-bar-mode -1)
@@ -39,7 +36,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (editorconfig use-package))))
+ '(package-selected-packages (quote (cherry-blossom-theme editorconfig use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

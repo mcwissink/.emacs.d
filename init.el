@@ -19,8 +19,6 @@
 
 (setq use-package-always-ensure t)
 
-(use-package hydra)
-
 (use-package
   editorconfig
   :config (editorconfig-mode 1))
@@ -35,6 +33,7 @@
 (ido-mode 1)
 
 ;; Other customization
+(setq inhibit-startup-message t)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (setq initial-scratch-message nil)

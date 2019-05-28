@@ -33,9 +33,11 @@
 (setq ido-enable-flex-matching t)
 (setq ido-everywhere t)
 (ido-mode 1)
+(use-package ido-vertical-mode
+  :config (ido-vertical-mode 1))
 
 ;; Other customization
-(setq inhibit-startup-message t)
+;; (setq inhibit-startup-message t)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (setq initial-scratch-message nil)
@@ -44,9 +46,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
+  '(package-selected-packages
+     (quote
+       (ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

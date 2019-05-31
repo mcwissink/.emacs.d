@@ -1,8 +1,3 @@
-;; http://www.gnu.org/software/emacs/manual/html_node/emacs/Recognize-Coding.html
-;; Do this before package stuff so that the package thing does not
-;; prompt which encoding I want to use to read packages with.
-(prefer-coding-system 'utf-8)
-
 (package-initialize)
 
 (require 'package)
@@ -20,23 +15,69 @@
 (setq use-package-always-ensure t)
 
 (use-package editorconfig
-  :config (editorconfig-mode 1))
+  :config
+  (editorconfig-mode 1))
 
 (use-package company
-  :config (global-company-mode 1))
+  :config
+  (global-company-mode 1))
 
+(use-package flycheck
+  :init
+  (global-flycheck-mode))
+
+(use-package boon
+  :init
+  (require 'boon-qwerty)
+  :config
+  (boon-mode))
+
+
+;(use-package flycheck-inline
+ ; :init
+  ;(with-eval-after-load 'flycheck (global-flycheck-inline-mode)))
+
+(use-package ivy
+  :init
+  (ivy-mode 1))
+
+(use-package smex)
+
+(use-package counsel :ensure t
+  :bind*                           ; load counsel when pressed
+  (("M-x"     . counsel-M-x)       ; M-x use counsel
+   ("C-x C-f" . counsel-find-file) ; C-x C-f use counsel-find-file
+   ("C-x C-r" . counsel-recentf)   ; search recently edited files
+   ("C-c f"   . counsel-git)       ; search for files in git repo
+   ("C-c s"   . counsel-git-grep)  ; search for regexp in git repo
+   ("C-c /"   . counsel-ag)        ; search for regexp in git repo using ag
+   ("C-c l"   . counsel-locate))   ; search for files or else using locate
+  )
+
+;; lsp-mode
+(use-package lsp-mode
+  :hook
+  ((prog-major-mode . lsp-prog-major-mode-enable)
+    (lsp-after-open-hook . lsp-enable-imenu)
+    (prog-mode . lsp))
+  :init
+  (setq
+    lsp-inhibit-message nil
+    lsp-highlight-symbol nil
+    lsp-enable-snippet nil))
+
+(use-package lsp-ui
+  :hook
+  (lsp-mode . lsp-ui-mode))
+
+(use-package company-lsp)
+  
 ;; Dark theme :)
 (use-package cherry-blossom-theme)
 (load-theme 'cherry-blossom t)
 
-;; IDO
-(setq ido-enable-flex-matching t)
-(setq ido-everywhere t)
-(ido-mode 1)
-(use-package ido-vertical-mode
-  :config (ido-vertical-mode 1))
-
 ;; Other customization
+(prefer-coding-system 'utf-8)  
 ;; (setq inhibit-startup-message t)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
@@ -48,7 +89,7 @@
  ;; If there is more than one, they won't work right.
   '(package-selected-packages
      (quote
-       (ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
+       (boon lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

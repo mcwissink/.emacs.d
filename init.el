@@ -26,12 +26,10 @@
   :init
   (global-flycheck-mode))
 
-(use-package boon
+(use-package evil
   :init
-  (require 'boon-qwerty)
-  :config
-  (boon-mode))
-
+  (require 'evil)
+  (evil-mode 1))
 
 ;(use-package flycheck-inline
  ; :init
@@ -77,8 +75,8 @@
 (load-theme 'cherry-blossom t)
 
 ;; Other customization
-(prefer-coding-system 'utf-8)  
-;; (setq inhibit-startup-message t)
+(prefer-coding-system 'utf-8) 
+(setq inhibit-startup-message t)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (setq initial-scratch-message nil)
@@ -89,7 +87,7 @@
  ;; If there is more than one, they won't work right.
   '(package-selected-packages
      (quote
-       (boon lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
+       (lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

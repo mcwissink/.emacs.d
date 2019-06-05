@@ -74,8 +74,14 @@
 (use-package cherry-blossom-theme)
 (load-theme 'cherry-blossom t)
 
+;; C++ configuration
+(defun my-c-setup ()
+   (c-set-offset 'innamespace 0))
+(add-hook 'c++-mode-hook 'my-c-setup)
+
 ;; Other customization
-(prefer-coding-system 'utf-8) 
+(set-face-attribute 'default nil :height 90)
+(prefer-coding-system 'utf-8)
 (setq inhibit-startup-message t)
 (tool-bar-mode -1)
 (menu-bar-mode -1)

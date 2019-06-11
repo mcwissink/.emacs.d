@@ -23,20 +23,19 @@
   (global-company-mode 1))
 
 (use-package flycheck
-  :init
+  :config
   (global-flycheck-mode))
 
 (use-package evil
-  :init
-  (require 'evil)
+  :config
   (evil-mode 1))
 
 (use-package flycheck-inline
- :init
- (with-eval-after-load 'flycheck (global-flycheck-inline-mode)))
+  :config
+  (with-eval-after-load 'flycheck (global-flycheck-inline-mode)))
 
 (use-package ivy
-  :init
+  :config
   (ivy-mode 1))
 
 (use-package smex)
@@ -58,7 +57,7 @@
   ((prog-major-mode . lsp-prog-major-mode-enable)
     (lsp-after-open-hook . lsp-enable-imenu)
     (prog-mode . lsp))
-  :init
+  :config
   (setq
     lsp-inhibit-message nil
     lsp-highlight-symbol nil
@@ -70,7 +69,14 @@
 
 (use-package company-lsp)
   
-;; Dark theme :)
+(use-package ace-window
+  :config
+  (global-set-key (kbd "M-p") 'ace-window))
+
+(use-package projectile
+  :config
+  (projectile-mode +1))
+
 (use-package grandshell-theme)
 (load-theme 'grandshell t)
 (set-cursor-color "#ffffff")
@@ -81,6 +87,12 @@
   (c-set-offset 'inclass '++)
   (c-set-offset 'access-label '-))
 (add-hook 'c++-mode-hook 'my-c-setup)
+
+;; Custom keybindings
+(global-set-key (kbd "C-c C-i") 'windmove-up)
+(global-set-key (kbd "C-c C-j") 'windmove-left)
+(global-set-key (kbd "C-c C-k") 'windmove-down)
+(global-set-key (kbd "C-c C-l") 'windmove-right)
 
 ;; Other customization
 (set-face-attribute 'default nil :height 90)
@@ -97,7 +109,7 @@
  ;; If there is more than one, they won't work right.
   '(package-selected-packages
      (quote
-       (grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
+       (projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -31,9 +31,9 @@
   (require 'evil)
   (evil-mode 1))
 
-;(use-package flycheck-inline
- ; :init
-  ;(with-eval-after-load 'flycheck (global-flycheck-inline-mode)))
+(use-package flycheck-inline
+ :init
+ (with-eval-after-load 'flycheck (global-flycheck-inline-mode)))
 
 (use-package ivy
   :init
@@ -71,21 +71,25 @@
 (use-package company-lsp)
   
 ;; Dark theme :)
-(use-package cherry-blossom-theme)
-(load-theme 'cherry-blossom t)
+(use-package grandshell-theme)
+(load-theme 'grandshell t)
+(set-cursor-color "#ffffff")
 
 ;; C++ configuration
 (defun my-c-setup ()
-   (c-set-offset 'innamespace 0))
+  (c-set-offset 'innamespace 0)
+  (c-set-offset 'inclass '++)
+  (c-set-offset 'access-label '-))
 (add-hook 'c++-mode-hook 'my-c-setup)
 
 ;; Other customization
 (set-face-attribute 'default nil :height 90)
 (prefer-coding-system 'utf-8)
 (setq inhibit-startup-message t)
+(setq initial-scratch-message nil)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
-(setq initial-scratch-message nil)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -93,7 +97,7 @@
  ;; If there is more than one, they won't work right.
   '(package-selected-packages
      (quote
-       (lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
+       (grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

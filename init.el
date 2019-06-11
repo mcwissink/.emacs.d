@@ -88,12 +88,6 @@
   (c-set-offset 'access-label '-))
 (add-hook 'c++-mode-hook 'my-c-setup)
 
-;; Custom keybindings
-(global-set-key (kbd "C-c C-i") 'windmove-up)
-(global-set-key (kbd "C-c C-j") 'windmove-left)
-(global-set-key (kbd "C-c C-k") 'windmove-down)
-(global-set-key (kbd "C-c C-l") 'windmove-right)
-
 ;; Other customization
 (set-face-attribute 'default nil :height 90)
 (prefer-coding-system 'utf-8)

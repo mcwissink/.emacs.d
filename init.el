@@ -71,15 +71,29 @@
   
 (use-package ace-window
   :config
-  (global-set-key (kbd "M-p") 'ace-window))
+  (global-set-key (kbd "C-x o") 'ace-window)
+  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 (use-package projectile
   :config
   (projectile-mode +1))
 
-(use-package grandshell-theme)
-(load-theme 'grandshell t)
+(use-package cquery
+  :config
+  (setq cquery-executable "/usr/bin/cquery"))
+
+(use-package cherry-blossom-theme)
+(load-theme 'cherry-blossom t)
 (set-cursor-color "#ffffff")
+;; Set company theme since cherry blossom doesn't
+(require 'color)
+(let ((bg (face-attribute 'default :background)))
+  (custom-set-faces
+    `(company-tooltip ((t (:inherit default :background "#222222"))))
+    `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
+    `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
+    `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
+    `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
 
 ;; C++ configuration
 (defun my-c-setup ()
@@ -93,6 +107,10 @@
 (prefer-coding-system 'utf-8)
 (setq inhibit-startup-message t)
 (setq initial-scratch-message nil)
+;; I don't like auto saving
+(setq auto-save-default nil)
+;; Remove unnecessary things
+(toggle-scroll-bar -1)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 

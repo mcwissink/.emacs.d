@@ -69,10 +69,10 @@
 
 (use-package company-lsp)
   
-(use-package ace-window
-  :config
-  (global-set-key (kbd "C-x o") 'ace-window)
-  (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
+;; (use-package ace-window
+;;   :config
+;;   (global-set-key (kbd "C-x o") 'ace-window)
+;;   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
 
 (use-package projectile
   :config
@@ -80,11 +80,42 @@
 
 (use-package cquery
   :config
-  (setq cquery-executable "/usr/bin/cquery"))
+  (setq cquery-executable "/usr/bin/cquery")
+  (setq cquery-extra-init-params '(:extraClangArguments ("-I/home/mark/Documents/Programming/tsal/include -I/usr/local/include/rtaudio"))))
 
+(use-package tide)
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (flycheck-mode +1)
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  (eldoc-mode +1)
+  (tide-hl-identifier-mode +1))
+
+(use-package web-mode
+  :config
+  (with-eval-after-load 'tide
+    (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+    (add-hook 'web-mode-hook
+      (lambda ()
+        (when (string-equal "tsx" (file-name-extension buffer-file-name))
+          (setup-tide-mode))))
+    ;; enable typescript-tslint checker
+    (flycheck-add-mode 'typescript-tslint 'web-mode)))
+
+
+
+
+
+
+;; Theme
 (use-package cherry-blossom-theme)
-(load-theme 'cherry-blossom t)
-(set-cursor-color "#ffffff")
+(if (display-graphic-p)
+    (load-theme 'cherry-blossom t)
+  (load-theme 'manoj-dark))
+
+(set-cursor-color "#aaaaaa")
+
 ;; Set company theme since cherry blossom doesn't
 (require 'color)
 (let ((bg (face-attribute 'default :background)))
@@ -119,12 +150,16 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
-  '(package-selected-packages
-     (quote
-       (projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
+ '(package-selected-packages
+   (quote
+    (w3m web-mode tide projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- )
+ '(company-scrollbar-bg ((t (:background "#199919991999"))))
+ '(company-scrollbar-fg ((t (:background "#0ccc0ccc0ccc"))))
+ '(company-tooltip ((t (:inherit default :background "#222222"))))
+ '(company-tooltip-common ((t (:inherit font-lock-constant-face))))
+ '(company-tooltip-selection ((t (:inherit font-lock-function-name-face)))))

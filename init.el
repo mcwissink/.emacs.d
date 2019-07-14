@@ -14,6 +14,10 @@
 
 (setq use-package-always-ensure t)
 
+(use-package org
+  :mode
+  (("\\.org$" . org-mode)))
+
 (use-package editorconfig
   :config
   (editorconfig-mode 1))
@@ -34,21 +38,16 @@
   :config
   (with-eval-after-load 'flycheck (global-flycheck-inline-mode)))
 
+(use-package smex)
+
 (use-package ivy
   :config
   (ivy-mode 1))
 
-(use-package smex)
-
-(use-package counsel :ensure t
-  :bind*                           ; load counsel when pressed
+(use-package counsel
+  :bind*
   (("M-x"     . counsel-M-x)       ; M-x use counsel
-   ("C-x C-f" . counsel-find-file) ; C-x C-f use counsel-find-file
-   ("C-x C-r" . counsel-recentf)   ; search recently edited files
-   ("C-c f"   . counsel-git)       ; search for files in git repo
-   ("C-c s"   . counsel-git-grep)  ; search for regexp in git repo
-   ("C-c /"   . counsel-ag)        ; search for regexp in git repo using ag
-   ("C-c l"   . counsel-locate))   ; search for files or else using locate
+   ("C-x C-f" . counsel-find-file)) ; C-x C-f use counsel-find-file
   )
 
 ;; lsp-mode
@@ -64,32 +63,28 @@
     lsp-enable-snippet nil))
 
 (use-package lsp-ui
+  :config
+  (setq lsp-ui-doc-enable nil
+      lsp-ui-peek-enable nil
+      lsp-ui-sideline-enable nil
+      lsp-ui-imenu-enable nil
+      lsp-ui-flycheck-enable t)
   :hook
   (lsp-mode . lsp-ui-mode))
 
 (use-package company-lsp)
   
-;; (use-package ace-window
-;;   :config
-;;   (global-set-key (kbd "C-x o") 'ace-window)
-;;   (setq aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l)))
-
 (use-package projectile
   :config
-  (projectile-mode +1))
+  (projectile-mode 1))
 
-(use-package cquery
-  :config
-  (setq cquery-executable "/usr/bin/cquery")
-  (setq cquery-extra-init-params '(:extraClangArguments ("-I/home/mark/Documents/Programming/tsal/include -I/usr/local/include/rtaudio"))))
-
+;; TypeScript configuration
 (use-package tide)
 (defun setup-tide-mode ()
   (interactive)
   (tide-setup)
-  (flycheck-mode +1)
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  (eldoc-mode +1)
+  (eldoc-mode 1)
   (tide-hl-identifier-mode +1))
 
 (use-package web-mode
@@ -103,6 +98,12 @@
     ;; enable typescript-tslint checker
     (flycheck-add-mode 'typescript-tslint 'web-mode)))
 
+;; C++ configuration
+(defun my-c-setup ()
+  (c-set-offset 'innamespace 0)
+  (c-set-offset 'inclass '++)
+  (c-set-offset 'access-label '-))
+(add-hook 'c++-mode-hook 'my-c-setup)
 
 
 
@@ -126,24 +127,18 @@
     `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
     `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
 
-;; C++ configuration
-(defun my-c-setup ()
-  (c-set-offset 'innamespace 0)
-  (c-set-offset 'inclass '++)
-  (c-set-offset 'access-label '-))
-(add-hook 'c++-mode-hook 'my-c-setup)
-
-;; Other customization
+;; Other aesthetic customization
 (set-face-attribute 'default nil :height 90)
 (prefer-coding-system 'utf-8)
 (setq inhibit-startup-message t)
 (setq initial-scratch-message nil)
 ;; I don't like auto saving
-(setq auto-save-default nil)
+;; (setq auto-save-default nil)
 ;; Remove unnecessary things
 (toggle-scroll-bar -1)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
+(set-face-foreground 'vertical-border (face-background 'default))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -152,7 +147,13 @@
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (w3m web-mode tide projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
+    (w3m web-mode tide projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package)))
+ '(safe-local-variable-values
+   (quote
+    ((eval setq-local flycheck-clang-include-path
+	   (list
+	    (expand-file-name "include"
+			      (projectile-project-root))))))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

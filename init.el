@@ -1,6 +1,8 @@
+(require 'package)
 (package-initialize)
 
-(require 'package)
+;; Fix for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (setq package-archives
   '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
@@ -50,7 +52,6 @@
    ("C-x C-f" . counsel-find-file)) ; C-x C-f use counsel-find-file
   )
 
-;; lsp-mode
 (use-package lsp-mode
   :hook
   ((prog-major-mode . lsp-prog-major-mode-enable)
@@ -116,12 +117,15 @@
   (load-theme 'manoj-dark))
 
 (set-cursor-color "#aaaaaa")
+(set-face-attribute 'fringe nil :background "#000000")
+(set-face-foreground 'vertical-border (face-background 'fringe))
 
 ;; Set company theme since cherry blossom doesn't
 (require 'color)
 (let ((bg (face-attribute 'default :background)))
   (custom-set-faces
-    `(company-tooltip ((t (:inherit default :background "#222222"))))
+    `(mode-line ((t (:background "#000000"))))
+    `(mode-line-inactive ((t (:background "#000000"))))
     `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
     `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
     `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
@@ -138,22 +142,21 @@
 (toggle-scroll-bar -1)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
-(set-face-foreground 'vertical-border (face-background 'default))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (w3m web-mode tide projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package)))
- '(safe-local-variable-values
-   (quote
-    ((eval setq-local flycheck-clang-include-path
-	   (list
-	    (expand-file-name "include"
-			      (projectile-project-root))))))))
+  '(package-selected-packages
+     (quote
+       (auctex w3m web-mode tide projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package)))
+  '(safe-local-variable-values
+     (quote
+       ((eval setq-local flycheck-clang-include-path
+          (list
+            (expand-file-name "include"
+              (projectile-project-root))))))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -163,4 +166,6 @@
  '(company-scrollbar-fg ((t (:background "#0ccc0ccc0ccc"))))
  '(company-tooltip ((t (:inherit default :background "#222222"))))
  '(company-tooltip-common ((t (:inherit font-lock-constant-face))))
- '(company-tooltip-selection ((t (:inherit font-lock-function-name-face)))))
+ '(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
+ '(mode-line ((t (:background "#000000"))))
+ '(mode-line-inactive ((t (:background "#000000")))))

@@ -2,7 +2,7 @@
 (package-initialize)
 
 ;; Fix for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+;;(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (setq package-archives
   '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
@@ -79,6 +79,10 @@
   :config
   (projectile-mode 1))
 
+(use-package js2-mode
+  :mode ("\\.js\\'" . js2-jsx-mode)
+  :interpreter ("node" . js2-jsx-mode))
+
 ;; TypeScript configuration
 (use-package tide)
 (defun setup-tide-mode ()
@@ -134,8 +138,11 @@
 ;; Other aesthetic customization
 (set-face-attribute 'default nil :height 90)
 (prefer-coding-system 'utf-8)
-(setq inhibit-startup-message t)
+;;(setq inhibit-startup-message t)
 (setq initial-scratch-message nil)
+;; Disable the awful bell in windows
+(setq ring-bell-function 'ignore)
+
 ;; I don't like auto saving
 ;; (setq auto-save-default nil)
 ;; Remove unnecessary things
@@ -148,9 +155,18 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+  '(ansi-color-faces-vector
+     [default default default italic underline success warning error])
+  '(ansi-color-names-vector
+     ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
+  '(custom-safe-themes
+     (quote
+       ("04589c18c2087cd6f12c01807eed0bdaa63983787025c209b89c779c61c3a4c4" default)))
+ '(fringe-mode 6 nil (fringe))
+ '(linum-format (quote dynamic))
   '(package-selected-packages
      (quote
-       (auctex w3m web-mode tide projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package)))
+       (a js2-mode auctex w3m web-mode tide projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package)))
   '(safe-local-variable-values
      (quote
        ((eval setq-local flycheck-clang-include-path

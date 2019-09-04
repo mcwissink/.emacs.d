@@ -20,6 +20,10 @@
   :mode
   (("\\.org$" . org-mode)))
 
+(use-package org-bullets
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1))))
+
 (use-package editorconfig
   :config
   (editorconfig-mode 1))
@@ -166,7 +170,7 @@
  '(linum-format (quote dynamic))
   '(package-selected-packages
      (quote
-       (a js2-mode auctex w3m web-mode tide projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package)))
+       (org-bullets a js2-mode auctex w3m web-mode tide projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package)))
   '(safe-local-variable-values
      (quote
        ((eval setq-local flycheck-clang-include-path

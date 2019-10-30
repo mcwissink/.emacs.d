@@ -111,7 +111,7 @@
 (add-hook 'c++-mode-hook 'my-c-setup)
 
 ;; Theme
-(use-package cherry-blossom-theme)
+(use-package soothe-theme)
 (if (display-graphic-p)
     (load-theme 'soothe t)
   (load-theme 'manoj-dark))

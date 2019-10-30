@@ -110,30 +110,25 @@
   (c-set-offset 'access-label '-))
 (add-hook 'c++-mode-hook 'my-c-setup)
 
-
-
-
-
 ;; Theme
 (use-package cherry-blossom-theme)
 (if (display-graphic-p)
-    (load-theme 'cherry-blossom t)
+    (load-theme 'soothe t)
   (load-theme 'manoj-dark))
 
 (set-cursor-color "#aaaaaa")
-(set-face-attribute 'fringe nil :background "#000000")
-(set-face-foreground 'vertical-border (face-background 'fringe))
+;; (set-face-attribute 'fringe nil :background "#000000")
+;; (set-face-foreground 'vertical-border (face-background 'fringe))
 
 ;; Set company theme since cherry blossom doesn't
-(require 'color)
-(let ((bg (face-attribute 'default :background)))
-  (custom-set-faces
-    `(mode-line ((t (:background "#000000"))))
-    `(mode-line-inactive ((t (:background "#000000"))))
-    `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
-    `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
-    `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
-    `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
+;; (require 'color)
+;; (let ((bg (face-attribute 'default :background)))
+;;   (custom-set-faces
+;;     `(mode-line-inactive ((t (:background "#000000"))))
+;;     `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
+;;     `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
+;;     `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
+;;     `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
 
 ;; Other aesthetic customization
 (set-face-attribute 'default nil :height 90)
@@ -150,6 +145,9 @@
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 
+(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -161,12 +159,12 @@
      ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
   '(custom-safe-themes
      (quote
-       ("04589c18c2087cd6f12c01807eed0bdaa63983787025c209b89c779c61c3a4c4" default)))
+       ("a77ced882e25028e994d168a612c763a4feb8c4ab67c5ff48688654d0264370c" "04589c18c2087cd6f12c01807eed0bdaa63983787025c209b89c779c61c3a4c4" default)))
  '(fringe-mode 6 nil (fringe))
  '(linum-format (quote dynamic))
   '(package-selected-packages
      (quote
-       (org-bullets a js2-mode auctex w3m web-mode tide projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package)))
+       (sudoku tramp speed-type soothe-theme org-bullets a js2-mode auctex w3m web-mode tide projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package)))
   '(safe-local-variable-values
      (quote
        ((eval setq-local flycheck-clang-include-path
@@ -183,5 +181,4 @@
  '(company-tooltip ((t (:inherit default :background "#222222"))))
  '(company-tooltip-common ((t (:inherit font-lock-constant-face))))
  '(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
- '(mode-line ((t (:background "#000000"))))
  '(mode-line-inactive ((t (:background "#000000")))))

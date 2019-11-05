@@ -104,31 +104,49 @@
     (flycheck-add-mode 'typescript-tslint 'web-mode)))
 
 ;; C++ configuration
-(defun my-c-setup ()
+(defun c++-setup ()
   (c-set-offset 'innamespace 0)
   (c-set-offset 'inclass '++)
-  (c-set-offset 'access-label '-))
-(add-hook 'c++-mode-hook 'my-c-setup)
+  (c-set-offset 'access-label '-)
+  (setq flycheck-clang-include-path
+               (list
+                 (expand-file-name "include"
+                   (projectile-project-root)))))
+
+(add-hook 'c++-mode-hook 'c++-setup)
+;; (when (string-equal system-type "windows-nt")
+;;   (let* (
+;;         (mypaths
+;;          '(
+;;             "C:/msys64/usr/bin"
+;;             "C:/msys64/mingw64/bin"
+;;            ))
+;;         )
+;;     (setenv "PATH" (mapconcat 'identity mypaths ";"))
+;;     (setq exec-path (append mypaths (list "." exec-directory)))))
 
 ;; Theme
-(use-package soothe-theme)
 (if (display-graphic-p)
-    (load-theme 'soothe t)
-  (load-theme 'manoj-dark))
+  (progn
+    (use-package cherry-blossom-theme)
+    (load-theme 'cherry-blossom t))
+  (progn
+    (use-package monokai-theme)
+    (load-theme 'monokai t)))
 
 (set-cursor-color "#aaaaaa")
-;; (set-face-attribute 'fringe nil :background "#000000")
-;; (set-face-foreground 'vertical-border (face-background 'fringe))
+(set-face-attribute 'fringe nil :background "#000000")
+(set-face-foreground 'vertical-border (face-background 'fringe))
 
 ;; Set company theme since cherry blossom doesn't
-;; (require 'color)
-;; (let ((bg (face-attribute 'default :background)))
-;;   (custom-set-faces
-;;     `(mode-line-inactive ((t (:background "#000000"))))
-;;     `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
-;;     `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
-;;     `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
-;;     `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
+(require 'color)
+(let ((bg (face-attribute 'default :background)))
+  (custom-set-faces
+    ;; `(mode-line-inactive ((t (:background "#000000"))))
+    `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
+    `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
+    `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
+    `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
 
 ;; Other aesthetic customization
 (set-face-attribute 'default nil :height 90)
@@ -164,13 +182,8 @@
  '(linum-format (quote dynamic))
   '(package-selected-packages
      (quote
-       (sudoku tramp speed-type soothe-theme org-bullets a js2-mode auctex w3m web-mode tide projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package)))
-  '(safe-local-variable-values
-     (quote
-       ((eval setq-local flycheck-clang-include-path
-          (list
-            (expand-file-name "include"
-              (projectile-project-root))))))))
+       (monokai-theme sudoku tramp speed-type soothe-theme org-bullets a js2-mode auctex w3m web-mode tide projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

@@ -104,7 +104,7 @@
     (flycheck-add-mode 'typescript-tslint 'web-mode)))
 
 ;; C++ configuration
-(defun c++-setup ()
+(defun setup-c++-mode ()
   (c-set-offset 'innamespace 0)
   (c-set-offset 'inclass '++)
   (c-set-offset 'access-label '-)
@@ -113,17 +113,18 @@
                  (expand-file-name "include"
                    (projectile-project-root)))))
 
-(add-hook 'c++-mode-hook 'c++-setup)
-;; (when (string-equal system-type "windows-nt")
-;;   (let* (
-;;         (mypaths
-;;          '(
-;;             "C:/msys64/usr/bin"
-;;             "C:/msys64/mingw64/bin"
-;;            ))
-;;         )
-;;     (setenv "PATH" (mapconcat 'identity mypaths ";"))
-;;     (setq exec-path (append mypaths (list "." exec-directory)))))
+(add-hook 'c++-mode-hook 'setup-c++-mode)
+
+(when (string-equal system-type "windows-nt")
+  (let* (
+        (mypaths
+         '(
+            "C:/msys64/usr/bin"
+            "C:/msys64/mingw64/bin"
+           )))
+
+    (setenv "PATH" (mapconcat 'identity (cons (getenv "PATH") mypaths) ";"))
+    (setq exec-path (append exec-path mypaths))))
 
 ;; Theme
 (if (display-graphic-p)

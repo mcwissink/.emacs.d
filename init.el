@@ -3,6 +3,7 @@
 
 ;; Fix for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341
 ;;(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
 (setq package-archives
   '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
@@ -48,9 +49,8 @@
 
 (use-package counsel
   :bind*
-  (("M-x"     . counsel-M-x)       ; M-x use counsel
-   ("C-x C-f" . counsel-find-file)) ; C-x C-f use counsel-find-file
-  )
+  (("M-x" . counsel-M-x)
+   ("C-x C-f" . counsel-find-file)))
 
 (use-package lsp-mode
   :hook
@@ -80,8 +80,10 @@
   (projectile-mode 1))
 
 (use-package js2-mode
-  :mode ("\\.js\\'" . js2-jsx-mode)
-  :interpreter ("node" . js2-jsx-mode))
+  :mode
+  ("\\.js\\'" . js2-jsx-mode)
+  :interpreter
+  ("node" . js2-jsx-mode))
 
 ;; TypeScript configuration
 (use-package tide)
@@ -164,26 +166,27 @@
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 
-(set-frame-parameter (selected-frame) 'alpha '(90 . 90))
-(add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+;; (set-frame-parameter (selected-frame) 'alpha '(90 . 90))
+;; (add-to-list 'default-frame-alist '(alpha . (90 . 90)))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
-  '(ansi-color-faces-vector
-     [default default default italic underline success warning error])
-  '(ansi-color-names-vector
-     ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
-  '(custom-safe-themes
-     (quote
-       ("a77ced882e25028e994d168a612c763a4feb8c4ab67c5ff48688654d0264370c" "04589c18c2087cd6f12c01807eed0bdaa63983787025c209b89c779c61c3a4c4" default)))
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
+ '(custom-safe-themes
+   (quote
+    ("a77ced882e25028e994d168a612c763a4feb8c4ab67c5ff48688654d0264370c" "04589c18c2087cd6f12c01807eed0bdaa63983787025c209b89c779c61c3a4c4" default)))
+ '(delete-selection-mode nil)
  '(fringe-mode 6 nil (fringe))
  '(linum-format (quote dynamic))
-  '(package-selected-packages
-     (quote
-       (monokai-theme sudoku tramp speed-type soothe-theme org-bullets a js2-mode auctex w3m web-mode tide projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
+ '(package-selected-packages
+   (quote
+    (monokai-theme sudoku tramp speed-type soothe-theme org-bullets a js2-mode auctex w3m web-mode tide projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

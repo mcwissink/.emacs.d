@@ -1,3 +1,10 @@
+;;; init.el --- Mark Wissink
+
+;;; Commentary:
+;;; a block of text so emacs-lisp stops complaining
+
+;;; Code:
+
 (require 'package)
 (package-initialize)
 
@@ -16,6 +23,8 @@
   (require 'use-package))
 
 (setq use-package-always-ensure t)
+
+(use-package tramp)
 
 (use-package org
   :mode
@@ -50,7 +59,7 @@
 (use-package counsel
   :bind*
   (("M-x" . counsel-M-x)
-   ("C-x C-f" . counsel-find-file)))
+    ("C-x C-f" . counsel-find-file)))
 
 (use-package lsp-mode
   :hook
@@ -59,6 +68,7 @@
     (prog-mode . lsp))
   :config
   (setq
+    lsp-prefer-flymake nil
     lsp-inhibit-message nil
     lsp-highlight-symbol nil
     lsp-enable-snippet nil))
@@ -66,15 +76,22 @@
 (use-package lsp-ui
   :config
   (setq lsp-ui-doc-enable nil
-      lsp-ui-peek-enable nil
-      lsp-ui-sideline-enable nil
-      lsp-ui-imenu-enable nil
-      lsp-ui-flycheck-enable t)
+    lsp-ui-peek-enable nil
+    lsp-ui-sideline-enable nil
+    lsp-ui-imenu-enable nil
+    lsp-ui-flycheck-enable t)
   :hook
   (lsp-mode . lsp-ui-mode))
 
 (use-package company-lsp)
-  
+
+;; (use-package ccls
+;;   :config
+;;   (setq flycheck-disabled-checkers '(c/c++-clang c/c++-cppcheck c/c++-gcc))
+;;   (setq ccls-executable "/user/bin/ccls")
+;;   :hook ((c-mode c++-mode objc-mode cuda-mode) .
+;;           (lambda () (require 'ccls) (lsp) (message "hello ccls"))))
+
 (use-package projectile
   :config
   (projectile-mode 1))
@@ -105,25 +122,25 @@
     ;; enable typescript-tslint checker
     (flycheck-add-mode 'typescript-tslint 'web-mode)))
 
-;; C++ configuration
+C++ configuration
 (defun setup-c++-mode ()
   (c-set-offset 'innamespace 0)
   (c-set-offset 'inclass '++)
   (c-set-offset 'access-label '-)
   (setq flycheck-clang-include-path
-               (list
-                 (expand-file-name "include"
-                   (projectile-project-root)))))
+    (list
+      (expand-file-name "include"
+        (projectile-project-root)))))
 
 (add-hook 'c++-mode-hook 'setup-c++-mode)
 
 (when (string-equal system-type "windows-nt")
   (let* (
-        (mypaths
-         '(
-            "C:/msys64/usr/bin"
-            "C:/msys64/mingw64/bin"
-           )))
+          (mypaths
+            '(
+               "C:/msys64/usr/bin"
+               "C:/msys64/mingw64/bin"
+               )))
 
     (setenv "PATH" (mapconcat 'identity (cons (getenv "PATH") mypaths) ";"))
     (setq exec-path (append exec-path mypaths))))
@@ -174,19 +191,19 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
- '(custom-safe-themes
-   (quote
-    ("a77ced882e25028e994d168a612c763a4feb8c4ab67c5ff48688654d0264370c" "04589c18c2087cd6f12c01807eed0bdaa63983787025c209b89c779c61c3a4c4" default)))
+  '(ansi-color-faces-vector
+     [default default default italic underline success warning error])
+  '(ansi-color-names-vector
+     ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
+  '(custom-safe-themes
+     (quote
+       ("a77ced882e25028e994d168a612c763a4feb8c4ab67c5ff48688654d0264370c" "04589c18c2087cd6f12c01807eed0bdaa63983787025c209b89c779c61c3a4c4" default)))
  '(delete-selection-mode nil)
  '(fringe-mode 6 nil (fringe))
  '(linum-format (quote dynamic))
- '(package-selected-packages
-   (quote
-    (monokai-theme sudoku tramp speed-type soothe-theme org-bullets a js2-mode auctex w3m web-mode tide projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
+  '(package-selected-packages
+     (quote
+       (ccls monokai-theme sudoku tramp speed-type soothe-theme org-bullets a js2-mode auctex w3m web-mode tide projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

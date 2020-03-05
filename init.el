@@ -33,7 +33,13 @@
   :custom
   (org-startup-truncated nil)
   :mode
-  ("\\.org$" . org-mode))
+  ("\\.org$" . org-mode)
+  :preface
+  (define-skeleton org-skeleton
+    "org header"
+    "Title: "
+    "#+TITLE:" str "\n"
+    "#+AUTHOR: Mark Wissink\n")
 
 (use-package editorconfig
   :config

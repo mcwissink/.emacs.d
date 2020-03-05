@@ -5,6 +5,9 @@
 
 ;;; Code:
 
+(setq custom-file "~/.emacs.d/custom.el")
+(load custom-file)
+
 (require 'package)
 (package-initialize)
 
@@ -27,8 +30,7 @@
 (use-package tramp)
 
 (use-package org
-  :mode
-  (("\\.org$" . org-mode)))
+  :mode ("\\.org$" . org-mode))
 
 (use-package editorconfig
   :config
@@ -90,12 +92,6 @@
   :config
   (projectile-mode 1))
 
-(use-package js2-mode
-  :mode
-  ("\\.js\\'" . js2-jsx-mode)
-  :interpreter
-  ("node" . js2-jsx-mode))
-
 ;; TypeScript configuration
 (use-package tide)
 (defun setup-tide-mode ()
@@ -139,61 +135,20 @@
     (setenv "PATH" (mapconcat 'identity (cons (getenv "PATH") mypaths) ";"))
     (setq exec-path (append exec-path mypaths))))
 
-;; Theme
-(if (display-graphic-p)
-  (progn
-    (use-package grandshell-theme)
-    (load-theme 'grandshell t))
-  (progn
-    (use-package grandshell-theme)
-    (load-theme 'monokai t)))
+(use-package apropospriate-theme
+  :ensure t
+  :config
+  (load-theme 'apropospriate-dark t))
 
-(set-cursor-color "#aaaaaa")
-(set-face-attribute 'fringe nil :background "#000000")
-(set-face-foreground 'vertical-border (face-background 'fringe))
-
-;; (require 'color)
-;; (let ((bg (face-attribute 'default :background)))
-;;   (custom-set-faces
-;;     ;; `(mode-line-inactive ((t (:background "#000000"))))
-;;     `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 1)))))
-;;     `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
-;;     `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
-;;     `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
-
-;; Other aesthetic customization
 (set-face-attribute 'default nil :height 90)
 (prefer-coding-system 'utf-8)
-;;(setq inhibit-startup-message t)
 (setq initial-scratch-message nil)
 ;; Disable the awful bell in windows
 (setq ring-bell-function 'ignore)
 
-;; I don't like auto saving
-;; (setq auto-save-default nil)
 ;; Remove unnecessary things
 (toggle-scroll-bar -1)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
-
-;; (set-frame-parameter (selected-frame) 'alpha '(90 . 90))
-;; (add-to-list 'default-frame-alist '(alpha . (90 . 90)))
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(ansi-color-names-vector
-   ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
- '(custom-safe-themes
-   (quote
-    ("a77ced882e25028e994d168a612c763a4feb8c4ab67c5ff48688654d0264370c" "04589c18c2087cd6f12c01807eed0bdaa63983787025c209b89c779c61c3a4c4" default)))
- '(delete-selection-mode nil)
- '(fringe-mode 6 nil (fringe))
- '(linum-format (quote dynamic))
- '(package-selected-packages
-   (quote
-    (ccls monokai-theme sudoku tramp speed-type soothe-theme org-bullets a js2-mode auctex w3m web-mode tide projectile ace-window grandshell-theme alect-themes alect-theme lua-mode boon-qwerty counsel smex ivy lsp-ui flycheck-inline flycheck ido-vertical-mode company-lsp company lsp-mode cherry-blossom-theme editorconfig use-package))))
+(provide 'init)
+;;; init.el ends here

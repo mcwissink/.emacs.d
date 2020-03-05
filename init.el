@@ -30,7 +30,10 @@
 (use-package tramp)
 
 (use-package org
-  :mode ("\\.org$" . org-mode))
+  :custom
+  (org-startup-truncated nil)
+  :mode
+  ("\\.org$" . org-mode))
 
 (use-package editorconfig
   :config
@@ -51,6 +54,10 @@
 (use-package flycheck-inline
   :config
   (with-eval-after-load 'flycheck (global-flycheck-inline-mode)))
+
+(use-package flyspell
+  :hook
+  ((org-mode text-mode) . flyspell-mode))
 
 (use-package smex)
 

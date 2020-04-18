@@ -4,7 +4,6 @@
 ;;; a block of text so stops complaining
 
 ;;; Code:
-
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
 
@@ -39,7 +38,7 @@
     "org header"
     "Title: "
     "#+TITLE:" str "\n"
-    "#+AUTHOR: Mark Wissink\n")
+    "#+AUTHOR: Mark Wissink\n"))
 
 (use-package editorconfig
   :config

@@ -40,9 +40,17 @@
     "#+TITLE:" str "\n"
     "#+AUTHOR: Mark Wissink\n")
   :config
+  (global-set-key (kbd "C-c k") 'org-capture)
   (setq org-directory "~/Dropbox/org/")
   (setq org-default-notes-file (concat org-directory "/todo.org"))
   (setq org-agenda-files '("~/Dropbox/org/"))
+  (setq org-capture-templates
+    '(("t" "TODO" entry (file+headline "" "Tasks")
+        "* TODO %?\n\n")
+       ("s" "Shopping" entry (file+headline "" "Shopping")
+         "* TODO %?\n\n")
+       ("w" "Work" entry (file+headline "~/Dropbox/org/tekton.org" "Tasks")
+         "* TODO %?\n  %t\n\n")))
   :init
   (require 'ox-publish)
   (setq org-publish-project-alist

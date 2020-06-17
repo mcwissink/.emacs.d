@@ -40,7 +40,7 @@
     "#+TITLE:" str "\n"
     "#+AUTHOR: Mark Wissink\n")
   :config
-  (global-set-key (kbd "C-c C-k") 'org-capture)
+  (global-set-key (kbd "C-c k") 'org-capture)
   (setq org-directory "~/Dropbox/org/")
   (setq org-default-notes-file (concat org-directory "/todo.org"))
   (setq org-agenda-files '("~/Dropbox/org/"))
@@ -135,8 +135,11 @@
   :config
   (push 'company-lsp company-backends))
 
+(use-package helm)
+
 (use-package projectile
   :config
+  (setq projectile-completion-system 'helm)
   (projectile-mode 1))
 
 ;; TypeScript configuration

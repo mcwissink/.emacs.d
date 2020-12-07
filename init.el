@@ -62,7 +62,7 @@
          :recursive t
          :publishing-function org-html-publish-to-html
          :headline-levels 4
-         :auto-preamble t
+         :author "Mark Wissink"
          )
        ("org-static"
          :base-directory "~/Programming/mcwissink.github.io/org/"
@@ -72,8 +72,8 @@
          :publishing-function org-publish-attachment
        )
        ("org-site" :components ("org-content" "org-static"))
-    )
-  ))
+    ))
+  )
 
 (use-package editorconfig
   :config
@@ -98,17 +98,6 @@
 (use-package flyspell
   :hook
   ((org-mode text-mode) . flyspell-mode))
-
-(use-package smex)
-
-(use-package ivy
-  :config
-  (ivy-mode 1))
-
-(use-package counsel
-  :bind
-  (("M-x" . counsel-M-x)
-    ("C-x C-f" . counsel-find-file)))
 
 (use-package lsp-mode
   :hook
@@ -135,12 +124,32 @@
   :config
   (push 'company-lsp company-backends))
 
-(use-package helm)
+(use-package ivy
+  :config
+  (ivy-mode 1))
+
+(use-package counsel
+  :config
+  (counsel-mode 1)
+  :bind
+  (
+    ("C-x a" . counsel-rg)
+    ))
+
+(use-package swiper
+  :bind
+  (
+    ("C-s" . swiper)
+    ))
 
 (use-package projectile
   :config
-  (setq projectile-completion-system 'helm)
-  (projectile-mode 1))
+  (setq projectile-completion-system 'ivy)
+  (projectile-mode 1)
+  :bind
+  (
+    ("C-x p" . projectile-find-file)
+    ))
 
 ;; TypeScript configuration
 (use-package tide)
@@ -190,7 +199,7 @@
   :config
   (load-theme 'apropospriate-dark t))
 
-(set-face-attribute 'default nil :height 90)
+(set-face-attribute 'default nil :height 110)
 (prefer-coding-system 'utf-8)
 (setq initial-scratch-message nil)
 ;; Disable the awful bell in windows

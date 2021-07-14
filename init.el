@@ -4,8 +4,11 @@
 ;;; a block of text so stops complaining
 
 ;;; Code:
+;;; Figure out how to load file without creating it first
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
+
+;; (setq ghub-use-workaround-for-emacs-bug 'force)
 
 (require 'package)
 (package-initialize)
@@ -44,13 +47,14 @@
   (setq org-directory "~/Dropbox/org/")
   (setq org-default-notes-file (concat org-directory "/todo.org"))
   (setq org-agenda-files '("~/Dropbox/org/"))
+  (setq org-src-tab-acts-natively t)
   (setq org-capture-templates
-    '(("t" "TODO" entry (file+headline "" "Tasks")
+    '(("d" "Task Details" entry (file+headline "" "Task Details")
         "* TODO %?\n\n")
-       ("s" "Shopping" entry (file+headline "" "Shopping")
-         "* TODO %?\n\n")
-       ("w" "Work" entry (file+headline "~/Dropbox/org/tekton.org" "Tasks")
-         "* TODO %?\n  %t\n\n")))
+       ("s" "Stand-Up" entry (file+headline "" "Stand-Up")
+         "* TODO %t %?\n\n")
+       ("t" "Task" entry (file+headline "" "Tasks")
+         "* TODO [/] %^{Task}\n  %t\n  %a\n  - [ ] test\n  - [ ] deploy\n** Notes\n")))
   :init
   (require 'ox-publish)
   (setq org-publish-project-alist
@@ -72,14 +76,17 @@
          :publishing-function org-publish-attachment
        )
        ("org-site" :components ("org-content" "org-static"))
-    ))
-  )
+    )))
 
 (use-package editorconfig
   :config
   (editorconfig-mode 1))
 
 (use-package company
+  :custom
+  (company-tooltip-idle-delay 0.4)
+  (company-dabbrev-d:config
+  (setq lsp-completion-provider :capf))
   :config
   (global-company-mode 1))
 
@@ -89,6 +96,9 @@
 
 (use-package evil
   :config
+  ;; (define-key evil-normal-state-map "\C-w" 'evil-delete)
+  (evil-set-initial-state 'vterm-mode 'emacs)
+  ;; (define-key evil-insert-state-map "\C-w" 'evil-delete)
   (evil-mode 1))
 
 (use-package flycheck-inline
@@ -98,31 +108,6 @@
 (use-package flyspell
   :hook
   ((org-mode text-mode) . flyspell-mode))
-
-(use-package lsp-mode
-  :hook
-  ((prog-major-mode . lsp-prog-major-mode-enable)
-    (lsp-after-open-hook . lsp-enable-imenu)
-    (prog-mode . lsp))
-  :config
-  (setq lsp-prefer-flymake nil
-    lsp-inhibit-message nil
-    lsp-highlight-symbol nil
-    lsp-enable-snippet nil))
-
-(use-package lsp-ui
-  :config
-  (setq lsp-ui-doc-enable nil
-    lsp-ui-peek-enable nil
-    lsp-ui-sideline-enable nil
-    lsp-ui-imenu-enable nil
-    lsp-ui-flycheck-enable t)
-  :hook
-  (lsp-mode . lsp-ui-mode))
-
-(use-package company-lsp
-  :config
-  (push 'company-lsp company-backends))
 
 (use-package ivy
   :config
@@ -135,6 +120,9 @@
   (
     ("C-x a" . counsel-rg)
     ))
+
+(use-package deadgrep
+  :bind (("C-c a" . #'deadgrep)))
 
 (use-package swiper
   :bind
@@ -151,6 +139,17 @@
     ("C-x p" . projectile-find-file)
     ))
 
+(use-package lsp-mode
+  :hook ((js-mode . lsp))
+  :config
+  (setq lsp-headerline-breadcrumb-enable nil)
+  :commands lsp)
+
+(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+
+(use-package magit)
+
 ;; TypeScript configuration
 (use-package tide)
 (defun setup-tide-mode ()
@@ -159,6 +158,13 @@
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
   (eldoc-mode 1)
   (tide-hl-identifier-mode +1))
+
+;; SCA development
+(use-package web-beautify)
+
+(use-package handlebars-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.tpl\\'" . handlebars-mode)))
 
 (use-package web-mode
   :config
@@ -205,10 +211,37 @@
 ;; Disable the awful bell in windows
 (setq ring-bell-function 'ignore)
 (global-auto-revert-mode 1)
+;; Disable backups because I don't like having to modify gitignores all the time
+(setq make-backup-files nil)
+(setq auto-save-default nil)
+(setq create-lockfiles nil)
+
+(set-frame-parameter (selected-frame) 'alpha '(100 . 100))
+(add-to-list 'default-frame-alist '(alpha . (100 . 100)))
 
 ;; Remove unnecessary things
 (toggle-scroll-bar -1)
 (tool-bar-mode -1)
 (menu-bar-mode -1)
+(display-battery-mode 1)
+(display-time-mode 1)
+(put 'dired-find-alternate-file 'disabled nil)
+(defalias 'yes-or-no-p 'y-or-n-p)
+(unbind-key "s-t")
+(unbind-key "s-p")
+(setq read-process-output-max (* 1024 1024)) ; 1mb
+
+(add-hook 'before-save-hook #'delete-trailing-whitespace)
+(add-hook 'js-mode-hook
+          (lambda () (add-hook 'before-save-hook #'lsp-eslint-fix-all)))
+
+(defun copy-file-name-to-clipboard ()
+  "Copy the current buffer file name to the clipboard."
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode) default-directory (buffer-file-name))))
+    (when filename
+      (kill-new filename)
+      (message "Copied buffer file name '%s' to the clipboard." filename))))
+
 (provide 'init)
 ;;; init.el ends here

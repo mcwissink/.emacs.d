@@ -158,6 +158,21 @@
 
 (use-package magit)
 
+(use-package org)
+
+(use-package org-roam
+  :after org
+  :custom
+  (org-roam-directory "~/Documents/org/roam"))
+
+(use-package deft
+  :after org
+  :custom
+  (deft-recursive t)
+  (deft-use-filter-string-for-filename t)
+  (deft-default-extension "org")
+  (deft-directory org-roam-directory))
+
 ;;; theme
 (use-package apropospriate-theme
   :config

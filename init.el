@@ -51,8 +51,17 @@
     (typescript-mode . lsp)
     (web-mode . lsp)
     (js-mode . lsp))
+  :config
+  (defun ts-before-save ()
+    (lsp-format-buffer)
+    (lsp-organize-imports))
+  (add-hook 'web-mode-hook
+    (lambda () (add-hook 'before-save-hook #'ts-before-save nil 'local)))
+  (add-hook 'typescript-mode-hook
+    (lambda () (add-hook 'before-save-hook #'ts-before-save nil 'local)))
   :custom
   (lsp-headerline-breadcrumb-enable nil))
+
 
 (use-package lsp-ui
   :commands
@@ -68,6 +77,8 @@
 
 ;; major modes
 (use-package handlebars-mode
+  :custom
+  (handlebars-basic-offset 4)
   :mode
   "\\.tpl\\'")
 
@@ -85,26 +96,38 @@
 ;;; editor
 (use-package vterm)
 
+(use-package multi-vterm
+  :bind
+  (
+    ("C-x t" . multi-vterm)))
+
 (use-package editorconfig
   :config
   (editorconfig-mode 1))
 
-(use-package evil
-  :config
-  (evil-set-initial-state 'vterm-mode 'emacs)
-  (evil-set-undo-system 'undo-tree)
-  (evil-mode 1)
-  ;; custom evil bindings
-  (define-key evil-normal-state-map (kbd "zr") 'query-replace)
-  (define-key evil-normal-state-map (kbd "zR") 'lsp-rename)
-  (define-key evil-normal-state-map (kbd "zf") 'swiper)
-  (define-key evil-normal-state-map (kbd "zj") 'flycheck-next-error)
-  (define-key evil-normal-state-map (kbd "zk") 'flycheck-previous-error))
-
-
 (use-package undo-tree
   :config
   (global-undo-tree-mode))
+
+(use-package evil
+  :custom
+  (evil-toggle-key "C-`")
+  :config
+  (evil-set-undo-system 'undo-tree)
+  (evil-set-initial-state 'vterm-mode 'emacs)
+  (evil-mode 1)
+  ;; custom evil bindings
+  (evil-define-key 'normal 'global (kbd "zr") 'query-replace)
+  (evil-define-key 'normal 'global (kbd "zsr") 'lsp-rename)
+  (evil-define-key 'normal 'global (kbd "zc") 'lsp-execute-code-action)
+  (evil-define-key 'normal 'global (kbd "zf") 'swiper)
+  (evil-define-key 'normal 'global (kbd "zg") 'counsel-rg)
+  (evil-define-key 'normal 'global (kbd "zp") 'projectile-find-file)
+  (evil-define-key 'normal 'global (kbd "zsp") 'counsel-fzf)
+  (evil-define-key 'normal 'global (kbd "zj") 'flycheck-next-error)
+  (evil-define-key 'normal 'global (kbd "zk") 'flycheck-previous-error)
+  (evil-define-key 'emacs 'vterm-mode-map (kbd "C-<tab>") 'multi-vterm-next)
+  (evil-define-key 'emacs 'vterm-mode-map (kbd "C-<S-<tab>>") 'multi-vterm-prev))
 
 (use-package ivy
   :bind

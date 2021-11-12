@@ -158,29 +158,29 @@
 
 (use-package magit)
 
-(use-package org)
+;; (use-package org)
 
-(use-package org-roam
-  :after org
-  :custom
-  (org-roam-directory "~/Documents/org/roam"))
+;; (use-package org-roam
+;;   :after org
+;;   :custom
+;;   (org-roam-directory "~/Documents/org/roam"))
 
-(use-package deft
-  :after org
-  :custom
-  (deft-recursive t)
-  (deft-use-filter-string-for-filename t)
-  (deft-default-extension "org")
-  (deft-directory org-roam-directory))
+;; (use-package deft
+;;   :after org
+;;   :custom
+;;   (deft-recursive t)
+;;   (deft-use-filter-string-for-filename t)
+;;   (deft-default-extension "org")
+;;   (deft-directory org-roam-directory))
 
 ;;; theme
-(use-package apropospriate-theme
+(use-package doom-themes
   :config
-  (load-theme 'apropospriate-dark t))
+  (load-theme 'doom-nord-light t))
 
-(custom-set-faces
-  '(mode-line ((t (:background "#424242" :box (:line-width 4 :color "#424242")))))
-  '(mode-line-inactive ((t (:background "#424242" :box (:line-width 4 :color "#424242"))))))
+;; (custom-set-faces
+;;   '(mode-line ((t (:background "#424242" :box (:line-width 4 :color "#424242")))))
+;;   '(mode-line-inactive ((t (:background "#424242" :box (:line-width 4 :color "#424242"))))))
 
 ;; remove scratch message
 (setq initial-scratch-message nil)

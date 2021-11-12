@@ -82,9 +82,14 @@
   :mode
   "\\.tpl\\'")
 
+(use-package typescript-mode)
+
+(use-package graphql-mode)
+
 (use-package web-mode
   :custom
   (web-mode-enable-auto-quoting nil)
+  ;;(web-mode-code-indent-offset 2)
   :mode
   "\\.tsx\\'")
 
@@ -103,6 +108,8 @@
 
 (use-package editorconfig
   :config
+  (add-hook 'editorconfig-after-apply-functions
+	    (lambda (props) (setq web-mode-block-padding 0)))
   (editorconfig-mode 1))
 
 (use-package undo-tree
@@ -126,6 +133,7 @@
   (evil-define-key 'normal 'global (kbd "zsp") 'counsel-fzf)
   (evil-define-key 'normal 'global (kbd "zj") 'flycheck-next-error)
   (evil-define-key 'normal 'global (kbd "zk") 'flycheck-previous-error)
+  (evil-define-key 'normal 'global (kbd "ze") 'flycheck-explain-error-at-point)
   (evil-define-key 'emacs 'vterm-mode-map (kbd "C-<tab>") 'multi-vterm-next)
   (evil-define-key 'emacs 'vterm-mode-map (kbd "C-<S-<tab>>") 'multi-vterm-prev))
 
@@ -148,6 +156,10 @@
 (use-package company
   :config
   (global-company-mode 1))
+
+(use-package flycheck 
+  :config
+  (global-flycheck-mode))
 
 (use-package projectile
   :bind

@@ -186,9 +186,14 @@
 ;;   (deft-directory org-roam-directory))
 
 ;;; theme
+
+(use-package twilight-bright-theme)
+
 (use-package doom-themes
+  :after twilight-bright-theme
   :config
-  (load-theme 'doom-nord-light t))
+  (load-theme 'twilight-bright t)
+  (load-theme 'doom-solarized-light t))
 
 ;; (custom-set-faces
 ;;   '(mode-line ((t (:background "#424242" :box (:line-width 4 :color "#424242")))))

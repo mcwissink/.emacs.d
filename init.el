@@ -41,7 +41,7 @@
 
 (use-package use-package-ensure-system-package)
 
-;;; coding 
+;;; coding
 ;; lsp
 (use-package lsp-mode
   :commands

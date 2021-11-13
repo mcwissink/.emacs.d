@@ -193,7 +193,8 @@
   :after twilight-bright-theme
   :config
   (load-theme 'twilight-bright t)
-  (load-theme 'doom-solarized-light t))
+  (load-theme 'doom-solarized-light t)
+  (set-face-attribute 'fringe nil :background "#FDF6E3" :foreground "#FDF6E3"))
 
 ;; (custom-set-faces
 ;;   '(mode-line ((t (:background "#424242" :box (:line-width 4 :color "#424242")))))

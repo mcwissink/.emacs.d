@@ -9,19 +9,22 @@
 ;;(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 ;; (setq ghub-use-workaround-for-emacs-bug 'force)
 
+(defun ensure-file (path path-callback)
+  "Give a handle to a file path"
+  (unless (file-exists-p path)
+    (with-temp-buffer (write-file path)))
+  (funcall path-callback path))
+
 ;;; bootstrap custom file
-(let ((custom-file-path "~/.emacs.d/custom.el"))
-  (unless (file-exists-p custom-file-path)
-        (with-temp-buffer (write-file custom-file-path)))
-  (setq custom-file custom-file-path)
-  (load custom-file))
+(ensure-file
+ "~/.emacs.d/custom.el"
+ (lambda (path)
+   (setq custom-file path)
+   (load custom-file)))
 
 ;;; bootstrap device file
 ;; useful for any device specific configurations
-(let ((device-file-path "~/.emacs.d/device.el"))
-  (unless (file-exists-p device-file-path)
-        (with-temp-buffer (write-file device-file-path)))
-  (load device-file-path))
+(ensure-file "~/.emacs.d/device.el" 'load)
 
 ;;; bootstrap use-package
 (require 'package)
@@ -98,7 +101,7 @@
 (use-package multi-vterm
   :bind
   (
-    ("C-x t" . multi-vterm)))
+    ("C-c t" . multi-vterm)))
 
 (use-package editorconfig
   :config
@@ -142,8 +145,8 @@
   :demand
   :bind
   (
-    ("C-x C-p" . counsel-fzf)
-    ("C-x a" . counsel-rg))
+    ("C-c C-p" . counsel-fzf)
+    ("C-c a" . counsel-rg))
   :config
   (counsel-mode 1))
 
@@ -151,14 +154,14 @@
   :config
   (global-company-mode 1))
 
-(use-package flycheck 
+(use-package flycheck
   :config
   (global-flycheck-mode))
 
 (use-package projectile
   :bind
   (
-    ("C-x p" . projectile-find-file))
+    ("C-c p" . projectile-find-file))
   :config
   (projectile-mode 1))
 
@@ -234,13 +237,27 @@
 
 
 ;;; custom functions
-(defun copy-file-name-to-clipboard ()
+(defun copy-filename-to-clipboard ()
   "Copy the current buffer file name to the clipboard."
   (interactive)
   (let ((filename (if (equal major-mode 'dired-mode) default-directory (buffer-file-name))))
     (when filename
       (kill-new filename)
       (message "Copied buffer file name '%s' to the clipboard." filename))))
+
+(defun note ()
+  "Create a note file entry."
+  (interactive)
+  (ensure-file
+   (format-time-string "~/Documents/notes/%Y-%m-%d.org")
+   'find-file))
+
+(defun future-note ()
+  "Create a future note file entry."
+  (interactive)
+  (ensure-file
+   (format "~/Documents/notes/%s.org" (org-read-date))
+   'find-file))
 
 (provide 'init)
 ;;; init.el ends here

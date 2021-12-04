@@ -62,7 +62,6 @@
   :custom
   (lsp-headerline-breadcrumb-enable nil))
 
-
 (use-package lsp-ui
   :commands
   lsp-ui-mode)
@@ -84,8 +83,6 @@
 
 (use-package typescript-mode)
 
-(use-package graphql-mode)
-
 (use-package web-mode
   :custom
   (web-mode-enable-auto-quoting nil)
@@ -93,12 +90,9 @@
   :mode
   "\\.tsx\\'")
 
-(use-package lsp-tailwindcss
-  :init
-  (setq lsp-tailwindcss-add-on-mode t)
-  (setq lsp-tailwindcss-auto-install-server nil))
-
 ;;; editor
+(use-package counsel-jq)
+
 (use-package vterm)
 
 (use-package multi-vterm
@@ -187,14 +181,18 @@
 
 ;;; theme
 
-(use-package twilight-bright-theme)
-
-(use-package doom-themes
-  :after twilight-bright-theme
+(use-package gruvbox-theme
   :config
-  (load-theme 'twilight-bright t)
-  (load-theme 'doom-solarized-light t)
-  (set-face-attribute 'fringe nil :background "#FDF6E3" :foreground "#FDF6E3"))
+  (load-theme 'gruvbox-light-hard))
+
+
+;; (use-package twilight-bright-theme)
+;; (use-package doom-themes
+;;   :after twilight-bright-theme
+;;   :config
+;;   (load-theme 'twilight-bright t)
+;;   (load-theme 'doom-solarized-light t)
+;;   (set-face-attribute 'fringe nil :background "#FDF6E3" :foreground "#FDF6E3"))
 
 ;; (custom-set-faces
 ;;   '(mode-line ((t (:background "#424242" :box (:line-width 4 :color "#424242")))))
@@ -229,6 +227,10 @@
 ;; fix large file performance problems
 (setq read-process-output-max (* 1024 1024))
 
+
+;;; CL
+(load (expand-file-name "~/.quicklisp/slime-helper.el"))
+(setq inferior-lisp-program "sbcl")
 
 
 ;;; custom functions

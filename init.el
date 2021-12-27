@@ -6,7 +6,7 @@
 
 ;;; random fixes
 ;; Fix for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=34341
-;;(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+;; (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 ;; (setq ghub-use-workaround-for-emacs-bug 'force)
 
 (defun ensure-file (path path-callback)
@@ -146,7 +146,7 @@
   :bind
   (
     ("C-c C-p" . counsel-fzf)
-    ("C-c a" . counsel-rg))
+    ("C-c g" . counsel-rg))
   :config
   (counsel-mode 1))
 
@@ -186,7 +186,7 @@
 
 (use-package gruvbox-theme
   :config
-  (load-theme 'gruvbox-light-hard))
+  (load-theme 'gruvbox-light-soft))
 
 
 ;; (use-package twilight-bright-theme)

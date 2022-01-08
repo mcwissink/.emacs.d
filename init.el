@@ -167,7 +167,8 @@
 
 (use-package magit)
 
-;; (use-package org)
+(use-package org
+  :hook ((org-mode . flyspell-mode)))
 
 ;; (use-package org-roam
 ;;   :after org
@@ -186,7 +187,7 @@
 
 (use-package gruvbox-theme
   :config
-  (load-theme 'gruvbox-light-soft))
+  (load-theme 'gruvbox-light-hard))
 
 
 ;; (use-package twilight-bright-theme)

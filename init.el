@@ -247,13 +247,6 @@
       (message "Copied buffer file name '%s' to the clipboard." filename))))
 
 (defun note ()
-  "Create a note file entry."
-  (interactive)
-  (ensure-file
-   (format-time-string "~/Documents/notes/%Y-%m-%d.org")
-   'find-file))
-
-(defun future-note ()
   "Create a future note file entry."
   (interactive)
   (ensure-file

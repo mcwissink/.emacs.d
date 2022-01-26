@@ -54,15 +54,8 @@
     (typescript-mode . lsp)
     (web-mode . lsp)
     (js-mode . lsp))
-  :config
-  (defun ts-before-save ()
-    (lsp-format-buffer)
-    (lsp-organize-imports))
-  (add-hook 'web-mode-hook
-    (lambda () (add-hook 'before-save-hook #'ts-before-save nil 'local)))
-  (add-hook 'typescript-mode-hook
-    (lambda () (add-hook 'before-save-hook #'ts-before-save nil 'local)))
   :custom
+  (lsp-auto-guess-root t)
   (lsp-headerline-breadcrumb-enable nil))
 
 (use-package lsp-ui
@@ -84,11 +77,18 @@
   :mode
   "\\.tpl\\'")
 
-(use-package typescript-mode)
+(use-package typescript-mode
+  :hook
+  (before-save . lsp-organize-imports)
+  (before-save . lsp-format-buffer))
 
 (use-package web-mode
+  :hook
+  (before-save . lsp-organize-imports)
+  (before-save . lsp-format-buffer)
   :custom
   (web-mode-enable-auto-quoting nil)
+  (web-mode-enable-auto-indentation nil)
   ;;(web-mode-code-indent-offset 2)
   :mode
   "\\.tsx\\'")
@@ -137,6 +137,7 @@
 (use-package ivy
   :bind
   (
+    ("C-c s" . swiper)
     ("C-s" . swiper))
   :config
   (ivy-mode 1))
@@ -233,8 +234,8 @@
 
 
 ;;; CL
-(load (expand-file-name "~/.quicklisp/slime-helper.el"))
-(setq inferior-lisp-program "sbcl")
+;; (load (expand-file-name "~/.quicklisp/slime-helper.el"))
+;; (setq inferior-lisp-program "sbcl")
 
 
 ;;; custom functions

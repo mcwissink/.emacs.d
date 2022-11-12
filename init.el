@@ -9,6 +9,11 @@
 ;; (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 ;; (setq ghub-use-workaround-for-emacs-bug 'force)
 
+;; remove bindings
+(unbind-key "s-t")
+(unbind-key "s-p")
+(unbind-key "C-z")
+
 (defun ensure-file (path path-callback)
   "Give a handle to a file path"
   (unless (file-exists-p path)
@@ -47,14 +52,16 @@
 ;;; coding
 ;; lsp
 (use-package lsp-mode
+  :bind
+  ("C-c C-a" . lsp-execute-code-action)
+  ("C-c C-r" . lsp-rename)
   :commands
   lsp
   :hook
-  (
-    (typescript-mode . lsp)
-    (web-mode . lsp)
+  ((web-mode . lsp)
     (js-mode . lsp))
   :custom
+  ;; (lsp-eslint-download-url "https://github.com/emacs-lsp/lsp-server-binaries/blob/master/dbaeumer.vscode-eslint-2.2.2.vsix?raw=true")
   (lsp-auto-guess-root t)
   (lsp-headerline-breadcrumb-enable nil))
 
@@ -71,16 +78,17 @@
   lsp-treemacs-errors-list)
 
 ;; major modes
-(use-package handlebars-mode
-  :custom
-  (handlebars-basic-offset 4)
-  :mode
-  "\\.tpl\\'")
+;; enable js-mode for ts buffers, LSP will handle typescript
+(add-to-list 'auto-mode-alist '("\\.tsx?" . js-mode))
 
-(use-package typescript-mode
-  :hook
-  (before-save . lsp-organize-imports)
-  (before-save . lsp-format-buffer))
+(use-package tree-sitter
+  :config
+  ;; activate tree-sitter on any buffer containing code for which it has a parser available
+  (global-tree-sitter-mode)
+  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
+
+(use-package tree-sitter-langs
+  :after tree-sitter)
 
 (use-package web-mode
   :hook
@@ -88,20 +96,21 @@
   (before-save . lsp-format-buffer)
   :custom
   (web-mode-enable-auto-quoting nil)
-  (web-mode-enable-auto-indentation nil)
-  ;;(web-mode-code-indent-offset 2)
-  :mode
-  "\\.tsx\\'")
+  (web-mode-enable-auto-indentation nil))
 
 ;;; editor
+(use-package skewer-mode)
+
 (use-package counsel-jq)
 
-(use-package vterm)
+(use-package vterm
+  :config
+  (unbind-key "C-c C-f" vterm-mode-map)
+  (unbind-key "C-c C-g" vterm-mode-map))
 
 (use-package multi-vterm
   :bind
-  (
-    ("C-c t" . multi-vterm)))
+  ("C-c C-t" . multi-vterm))
 
 (use-package editorconfig
   :config
@@ -110,8 +119,15 @@
   (editorconfig-mode 1))
 
 (use-package undo-tree
+  :custom
+  (undo-tree-auto-save-history nil)
   :config
   (global-undo-tree-mode))
+
+(use-package yasnippet
+  :config
+  (yas-global-mode 1))
+(use-package yasnippet-snippets)
 
 (use-package evil
   :custom
@@ -121,33 +137,25 @@
   (evil-set-initial-state 'vterm-mode 'emacs)
   (evil-mode 1)
   ;; custom evil bindings
-  (evil-define-key 'normal 'global (kbd "zr") 'query-replace)
-  (evil-define-key 'normal 'global (kbd "zsr") 'lsp-rename)
-  (evil-define-key 'normal 'global (kbd "zc") 'lsp-execute-code-action)
-  (evil-define-key 'normal 'global (kbd "zf") 'swiper)
-  (evil-define-key 'normal 'global (kbd "zg") 'counsel-rg)
-  (evil-define-key 'normal 'global (kbd "zp") 'projectile-find-file)
-  (evil-define-key 'normal 'global (kbd "zsp") 'counsel-fzf)
-  (evil-define-key 'normal 'global (kbd "zj") 'flycheck-next-error)
-  (evil-define-key 'normal 'global (kbd "zk") 'flycheck-previous-error)
-  (evil-define-key 'normal 'global (kbd "ze") 'flycheck-explain-error-at-point)
-  (evil-define-key 'emacs 'vterm-mode-map (kbd "C-<tab>") 'multi-vterm-next)
-  (evil-define-key 'emacs 'vterm-mode-map (kbd "C-<S-<tab>>") 'multi-vterm-prev))
+  (evil-define-key 'normal 'global (kbd "gi") 'lsp-ui-peek-find-implementation)
+  (evil-define-key 'normal 'global (kbd "gd") 'lsp-ui-peek-find-definitions)
+  (evil-define-key 'normal 'global (kbd "gr") 'lsp-ui-peek-find-references)
+  (evil-define-key 'emacs 'vterm-mode-map (kbd "C-<tab>") 'multi-vterm-next))
+
+(use-package helm-ag
+  :bind
+  ("C-c g" . helm-ag-project-root))
 
 (use-package ivy
   :bind
-  (
-    ("C-c s" . swiper)
-    ("C-s" . swiper))
+  ("C-s" . swiper)
   :config
   (ivy-mode 1))
 
 (use-package counsel
   :demand
   :bind
-  (
-    ("C-c C-p" . counsel-fzf)
-    ("C-c g" . counsel-rg))
+  ("C-c C-g" . counsel-rg)
   :config
   (counsel-mode 1))
 
@@ -157,16 +165,20 @@
 
 (use-package flycheck
   :config
+  (setq flycheck-javascript-eslint-executable "eslint_d")
   (global-flycheck-mode))
 
 (use-package projectile
   :bind
-  (
-    ("C-c p" . projectile-find-file))
+  ("C-c C-f" . projectile-find-file)
   :config
   (projectile-mode 1))
 
 (use-package magit)
+
+(use-package visual-regexp
+  :bind
+  ("C-c r" . vr/replace))
 
 (use-package org
   :hook ((org-mode . flyspell-mode)))
@@ -188,8 +200,7 @@
 
 (use-package gruvbox-theme
   :config
-  (load-theme 'gruvbox-light-hard))
-
+  (load-theme 'gruvbox-light-soft))
 
 ;; (use-package twilight-bright-theme)
 ;; (use-package doom-themes
@@ -225,12 +236,9 @@
 ;; simplify y or n
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; remove annoying bindings
-(unbind-key "s-t")
-(unbind-key "s-p")
-
 ;; fix large file performance problems
 (setq read-process-output-max (* 1024 1024))
+(setq gc-cons-threshold 100000000)
 
 
 ;;; CL

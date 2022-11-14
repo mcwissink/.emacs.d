@@ -164,6 +164,8 @@
   (global-company-mode 1))
 
 (use-package flycheck
+  :bind
+  ("C-c C-e" . flycheck-explain-error-at-point)
   :config
   (setq flycheck-javascript-eslint-executable "eslint_d")
   (global-flycheck-mode))

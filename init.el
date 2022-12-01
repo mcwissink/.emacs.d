@@ -190,26 +190,6 @@
 (use-package org
   :hook ((org-mode . flyspell-mode)))
 
-;; (use-package org-roam
-;;   :after org
-;;   :custom
-;;   (org-roam-directory "~/Documents/org/roam"))
-
-;; (use-package deft
-;;   :after org
-;;   :custom
-;;   (deft-recursive t)
-;;   (deft-use-filter-string-for-filename t)
-;;   (deft-default-extension "org")
-;;   (deft-directory org-roam-directory))
-
-(use-package eaf
-  :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
-  :custom
-  ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
-  (eaf-browser-enable-adblocker t))
-
-
 ;;; theme
 
 (use-package gruvbox-theme

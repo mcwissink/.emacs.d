@@ -10,9 +10,9 @@
 ;; (setq ghub-use-workaround-for-emacs-bug 'force)
 
 ;; remove bindings
-(unbind-key "s-t")
-(unbind-key "s-p")
-(unbind-key "C-z")
+;;(unbind-key "s-t")
+;;(unbind-key "s-p")
+;;(unbind-key "C-z")
 
 (defun ensure-file (path path-callback)
   "Give a handle to a file path"
@@ -50,53 +50,52 @@
 (use-package use-package-ensure-system-package)
 
 ;;; coding
-;; lsp
-(use-package lsp-mode
-  :bind
-  ("C-c C-a" . lsp-execute-code-action)
-  ("C-c C-r" . lsp-rename)
-  :commands
-  lsp
-  :hook
-  ((web-mode . lsp)
-    (js-mode . lsp))
+;; eglot
+(use-package eglot
+  :config
+  (add-to-list 'eglot-server-programs '(typescript-ts-mode . ("eslint" "--stdio")))
   :custom
-  ;; (lsp-eslint-download-url "https://github.com/emacs-lsp/lsp-server-binaries/blob/master/dbaeumer.vscode-eslint-2.2.2.vsix?raw=true")
-  (lsp-auto-guess-root t)
-  (lsp-headerline-breadcrumb-enable nil))
+  (eglot-confirm-server-initiated-edits nil)
+  :hook
+  ((typescript-ts-mode . eglot-ensure))
+  :bind
+  ("C-c C-a" . eglot-code-actions)
+  ("C-c C-r" . eglot-rename))
 
-(use-package lsp-ui
-  :commands
-  lsp-ui-mode)
+;; lsp
+;; (use-package lsp-mode
+;;   :bind
+;;   ("C-c C-a" . lsp-execute-code-action)
+;;   ("C-c C-r" . lsp-rename)
+;;   :commands
+;;   lsp
+;;   :hook
+;;   ((typescript-ts-mode . lsp))
+;;   :custom
+;;   ;; (lsp-eslint-download-url "https://github.com/emacs-lsp/lsp-server-binaries/blob/master/dbaeumer.vscode-eslint-2.2.2.vsix?raw=true")
+;;   (lsp-auto-guess-root t)
+;;   (lsp-headerline-breadcrumb-enable nil))
 
-(use-package lsp-ivy
-  :commands
-  lsp-ivy-workspace-symbol)
+;; (use-package lsp-ui
+;;   :commands
+;;   lsp-ui-mode)
 
-(use-package lsp-treemacs
-  :commands
-  lsp-treemacs-errors-list)
+;; (use-package lsp-ivy
+;;   :commands
+;;   lsp-ivy-workspace-symbol)
+
+;; (use-package lsp-treemacs
+;;   :commands
+;;   lsp-treemacs-errors-list)
 
 ;; major modes
-;; enable js-mode for ts buffers, LSP will handle typescript
-(add-to-list 'auto-mode-alist '("\\.tsx?" . js-mode))
-
-(use-package tree-sitter
-  :config
-  ;; activate tree-sitter on any buffer containing code for which it has a parser available
-  (global-tree-sitter-mode)
-  (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode))
-
-(use-package tree-sitter-langs
-  :after tree-sitter)
-
-(use-package web-mode
-  :hook
-  (before-save . lsp-organize-imports)
-  (before-save . lsp-format-buffer)
-  :custom
-  (web-mode-enable-auto-quoting nil)
-  (web-mode-enable-auto-indentation nil))
+;; (use-package web-mode
+;;   :hook
+;;   (before-save . lsp-organize-imports)
+;;   (before-save . lsp-format-buffer)
+;;   :custom
+;;   (web-mode-enable-auto-quoting nil)
+;;   (web-mode-enable-auto-indentation nil))
 
 ;;; editor
 (use-package skewer-mode)
@@ -105,6 +104,7 @@
 
 (use-package vterm
   :config
+  (unbind-key "C-c C-t" vterm-mode-map)
   (unbind-key "C-c C-f" vterm-mode-map)
   (unbind-key "C-c C-g" vterm-mode-map))
 
@@ -114,8 +114,6 @@
 
 (use-package editorconfig
   :config
-  (add-hook 'editorconfig-after-apply-functions
-	    (lambda (props) (setq web-mode-block-padding 0)))
   (editorconfig-mode 1))
 
 (use-package undo-tree
@@ -137,9 +135,9 @@
   (evil-set-initial-state 'vterm-mode 'emacs)
   (evil-mode 1)
   ;; custom evil bindings
-  (evil-define-key 'normal 'global (kbd "gi") 'lsp-ui-peek-find-implementation)
-  (evil-define-key 'normal 'global (kbd "gd") 'lsp-ui-peek-find-definitions)
-  (evil-define-key 'normal 'global (kbd "gr") 'lsp-ui-peek-find-references)
+  (evil-define-key 'normal 'global (kbd "gi") 'eglot-find-implementation)
+  (evil-define-key 'normal 'global (kbd "gd") 'xref-find-definitions)
+  (evil-define-key 'normal 'global (kbd "gr") 'xref-find-references)
   (evil-define-key 'emacs 'vterm-mode-map (kbd "C-<tab>") 'multi-vterm-next))
 
 (use-package helm-ag
@@ -151,6 +149,13 @@
   ("C-s" . swiper)
   :config
   (ivy-mode 1))
+
+(use-package ivy-xref
+  :ensure t
+  :init
+  (when (>= emacs-major-version 27)
+    (setq xref-show-definitions-function #'ivy-xref-show-defs))
+  (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
 
 (use-package counsel
   :demand
@@ -198,6 +203,13 @@
 ;;   (deft-default-extension "org")
 ;;   (deft-directory org-roam-directory))
 
+(use-package eaf
+  :load-path "~/.emacs.d/site-lisp/emacs-application-framework"
+  :custom
+  ; See https://github.com/emacs-eaf/emacs-application-framework/wiki/Customization
+  (eaf-browser-enable-adblocker t))
+
+
 ;;; theme
 
 (use-package gruvbox-theme
@@ -242,6 +254,9 @@
 (setq read-process-output-max (* 1024 1024))
 (setq gc-cons-threshold 100000000)
 
+
+(setq treesit-extra-load-path '("~/.emacs.d/languages"))
+(setq typescript-ts-mode-indent-offset 4)
 
 ;;; CL
 ;; (load (expand-file-name "~/.quicklisp/slime-helper.el"))

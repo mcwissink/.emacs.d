@@ -192,12 +192,14 @@
 
 ;;; theme
 
-(use-package gruvbox-theme
-  :config
-  (load-theme 'gruvbox-light-soft))
+;; (use-package gruvbox-theme
+;;   :config
+;;   (load-theme 'gruvbox-light-soft))
 
 ;; (use-package twilight-bright-theme)
-;; (use-package doom-themes
+(use-package doom-themes
+  :config
+  (load-theme 'doom-homage-white))
 ;;   :after twilight-bright-theme
 ;;   :config
 ;;   (load-theme 'twilight-bright t)

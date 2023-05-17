@@ -10,9 +10,9 @@
 ;; (setq ghub-use-workaround-for-emacs-bug 'force)
 
 ;; remove bindings
-;;(unbind-key "s-t")
-;;(unbind-key "s-p")
-;;(unbind-key "C-z")
+(global-unset-key (kbd "C-z"))
+(global-unset-key (kbd "s-t"))
+(global-unset-key (kbd "s-p"))
 
 (defun ensure-file (path path-callback)
   "Give a handle to a file path"
@@ -51,38 +51,36 @@
 
 ;;; coding
 ;; eglot
-(use-package eglot
-  :config
-  (add-to-list 'eglot-server-programs '(typescript-ts-mode . ("eslint" "--stdio")))
-  :custom
-  (eglot-confirm-server-initiated-edits nil)
-  :hook
-  ((typescript-ts-mode . eglot-ensure))
-  :bind
-  ("C-c C-a" . eglot-code-actions)
-  ("C-c C-r" . eglot-rename))
-
-;; lsp
-;; (use-package lsp-mode
-;;   :bind
-;;   ("C-c C-a" . lsp-execute-code-action)
-;;   ("C-c C-r" . lsp-rename)
-;;   :commands
-;;   lsp
-;;   :hook
-;;   ((typescript-ts-mode . lsp))
+;; (use-package eglot
+;;   ;; :config
+;;   ;; (add-to-list 'eglot-server-programs '(typescript-ts-mode . ("eslint" "--stdio")))
 ;;   :custom
-;;   ;; (lsp-eslint-download-url "https://github.com/emacs-lsp/lsp-server-binaries/blob/master/dbaeumer.vscode-eslint-2.2.2.vsix?raw=true")
-;;   (lsp-auto-guess-root t)
-;;   (lsp-headerline-breadcrumb-enable nil))
+;;   (eglot-confirm-server-initiated-edits nil)
+;;   :hook
+;;   ((typescript-ts-mode . eglot-ensure))
+;;   :bind
+;;   ("C-c C-a" . eglot-code-actions)
+;;   ("C-c C-r" . eglot-rename))
 
-;; (use-package lsp-ui
-;;   :commands
-;;   lsp-ui-mode)
+(use-package lsp-mode
+  :bind
+  ("C-c C-a" . lsp-execute-code-action)
+  ("C-c C-r" . lsp-rename)
+  :commands
+  lsp
+  :hook
+  ((typescript-ts-mode . lsp))
+  :custom
+  (lsp-auto-guess-root t)
+  (lsp-headerline-breadcrumb-enable nil))
 
-;; (use-package lsp-ivy
-;;   :commands
-;;   lsp-ivy-workspace-symbol)
+(use-package lsp-ui
+  :commands
+  lsp-ui-mode)
+
+(use-package lsp-ivy
+  :commands
+  lsp-ivy-workspace-symbol)
 
 ;; (use-package lsp-treemacs
 ;;   :commands
@@ -135,9 +133,9 @@
   (evil-set-initial-state 'vterm-mode 'emacs)
   (evil-mode 1)
   ;; custom evil bindings
-  (evil-define-key 'normal 'global (kbd "gi") 'eglot-find-implementation)
-  (evil-define-key 'normal 'global (kbd "gd") 'xref-find-definitions)
-  (evil-define-key 'normal 'global (kbd "gr") 'xref-find-references)
+  (evil-define-key 'normal 'global (kbd "gi") 'lsp-find-implementation)
+  (evil-define-key 'normal 'global (kbd "gd") 'lsp-find-definition)
+  (evil-define-key 'normal 'global (kbd "gr") 'lsp-find-references)
   (evil-define-key 'emacs 'vterm-mode-map (kbd "C-<tab>") 'multi-vterm-next))
 
 (use-package helm-ag
@@ -187,14 +185,11 @@
   :bind
   ("C-c r" . vr/replace))
 
-(use-package org
-  :hook ((org-mode . flyspell-mode)))
-
 ;;; theme
 
-;; (use-package gruvbox-theme
-;;   :config
-;;   (load-theme 'gruvbox-light-soft))
+(use-package doom-themes
+  :config
+  (load-theme 'doom-homage-white))
 
 ;; (use-package twilight-bright-theme)
 (use-package doom-themes
@@ -238,7 +233,8 @@
 
 
 (setq treesit-extra-load-path '("~/.emacs.d/languages"))
-(setq typescript-ts-mode-indent-offset 4)
+(setq-default typescript-ts-mode-indent-offset 4)
+(setq-default indent-tabs-mode nil)
 
 ;;; CL
 ;; (load (expand-file-name "~/.quicklisp/slime-helper.el"))
@@ -260,6 +256,14 @@
   (ensure-file
    (format "~/Documents/notes/%s.org" (org-read-date))
    'find-file))
+
+(defun toggle-window-transparency ()
+  "Toggle transparency."
+  (interactive)
+  (let ((alpha-transparency 75))
+    (pcase (frame-parameter nil 'alpha-background)
+      (alpha-transparency (set-frame-parameter nil 'alpha-background 100))
+      (t (set-frame-parameter nil 'alpha-background alpha-transparency)))))
 
 (provide 'init)
 ;;; init.el ends here

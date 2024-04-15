@@ -15,7 +15,6 @@
 (global-unset-key (kbd "s-p"))
 
 (defun ensure-file (path path-callback)
-  "Give a handle to a file path"
   (unless (file-exists-p path)
     (with-temp-buffer (write-file path)))
   (funcall path-callback path))
@@ -50,18 +49,7 @@
 (use-package use-package-ensure-system-package)
 
 ;;; coding
-;; eglot
-;; (use-package eglot
-;;   ;; :config
-;;   ;; (add-to-list 'eglot-server-programs '(typescript-ts-mode . ("eslint" "--stdio")))
-;;   :custom
-;;   (eglot-confirm-server-initiated-edits nil)
-;;   :hook
-;;   ((typescript-ts-mode . eglot-ensure))
-;;   :bind
-;;   ("C-c C-a" . eglot-code-actions)
-;;   ("C-c C-r" . eglot-rename))
-
+;; lsp-mode is required until eglot supports multiple language servers for a single mode
 (use-package lsp-mode
   :bind
   ("C-c C-a" . lsp-execute-code-action)
@@ -69,18 +57,15 @@
   :commands
   lsp
   :hook
-  ((typescript-ts-mode . lsp))
+  ((tsx-ts-mode . lsp-deferred)
+   (typescript-ts-mode . lsp-deferred))
   :custom
   (lsp-auto-guess-root t)
   (lsp-headerline-breadcrumb-enable nil))
 
-(use-package lsp-ui
-  :commands
-  lsp-ui-mode)
+(use-package lsp-ui :commands lsp-ui-mode)
 
-(use-package lsp-ivy
-  :commands
-  lsp-ivy-workspace-symbol)
+(use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 
 ;; (use-package lsp-treemacs
 ;;   :commands
@@ -138,10 +123,6 @@
   (evil-define-key 'normal 'global (kbd "gr") 'lsp-find-references)
   (evil-define-key 'emacs 'vterm-mode-map (kbd "C-<tab>") 'multi-vterm-next))
 
-(use-package helm-ag
-  :bind
-  ("C-c g" . helm-ag-project-root))
-
 (use-package ivy
   :bind
   ("C-s" . swiper)
@@ -151,8 +132,7 @@
 (use-package ivy-xref
   :ensure t
   :init
-  (when (>= emacs-major-version 27)
-    (setq xref-show-definitions-function #'ivy-xref-show-defs))
+  (setq xref-show-definitions-function #'ivy-xref-show-defs)
   (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
 
 (use-package counsel
@@ -160,24 +140,17 @@
   :bind
   ("C-c C-g" . counsel-rg)
   :config
-  (counsel-mode 1))
+  (counsel-mode))
 
 (use-package company
   :config
-  (global-company-mode 1))
-
-(use-package flycheck
-  :bind
-  ("C-c C-e" . flycheck-explain-error-at-point)
-  :config
-  (setq flycheck-javascript-eslint-executable "eslint_d")
-  (global-flycheck-mode))
+  (global-company-mode))
 
 (use-package projectile
   :bind
   ("C-c C-f" . projectile-find-file)
   :config
-  (projectile-mode 1))
+  (projectile-mode))
 
 (use-package magit)
 
@@ -186,24 +159,9 @@
   ("C-c r" . vr/replace))
 
 ;;; theme
-
 (use-package doom-themes
   :config
   (load-theme 'doom-homage-white))
-
-;; (use-package twilight-bright-theme)
-(use-package doom-themes
-  :config
-  (load-theme 'doom-homage-white))
-;;   :after twilight-bright-theme
-;;   :config
-;;   (load-theme 'twilight-bright t)
-;;   (load-theme 'doom-solarized-light t)
-;;   (set-face-attribute 'fringe nil :background "#FDF6E3" :foreground "#FDF6E3"))
-
-;; (custom-set-faces
-;;   '(mode-line ((t (:background "#424242" :box (:line-width 4 :color "#424242")))))
-;;   '(mode-line-inactive ((t (:background "#424242" :box (:line-width 4 :color "#424242"))))))
 
 ;; remove scratch message
 (setq initial-scratch-message nil)

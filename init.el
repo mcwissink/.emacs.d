@@ -81,8 +81,6 @@
 ;;   (web-mode-enable-auto-indentation nil))
 
 ;;; editor
-(use-package skewer-mode)
-
 (use-package counsel-jq)
 
 (use-package vterm
@@ -104,11 +102,6 @@
   (undo-tree-auto-save-history nil)
   :config
   (global-undo-tree-mode))
-
-(use-package yasnippet
-  :config
-  (yas-global-mode 1))
-(use-package yasnippet-snippets)
 
 (use-package evil
   :custom
@@ -207,21 +200,6 @@
     (when filename
       (kill-new filename)
       (message "Copied buffer file name '%s' to the clipboard." filename))))
-
-(defun note ()
-  "Create a future note file entry."
-  (interactive)
-  (ensure-file
-   (format "~/Documents/notes/%s.org" (org-read-date))
-   'find-file))
-
-(defun toggle-window-transparency ()
-  "Toggle transparency."
-  (interactive)
-  (let ((alpha-transparency 75))
-    (pcase (frame-parameter nil 'alpha-background)
-      (alpha-transparency (set-frame-parameter nil 'alpha-background 100))
-      (t (set-frame-parameter nil 'alpha-background alpha-transparency)))))
 
 (provide 'init)
 ;;; init.el ends here

@@ -67,22 +67,7 @@
 
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 
-;; (use-package lsp-treemacs
-;;   :commands
-;;   lsp-treemacs-errors-list)
-
-;; major modes
-;; (use-package web-mode
-;;   :hook
-;;   (before-save . lsp-organize-imports)
-;;   (before-save . lsp-format-buffer)
-;;   :custom
-;;   (web-mode-enable-auto-quoting nil)
-;;   (web-mode-enable-auto-indentation nil))
-
 ;;; editor
-(use-package counsel-jq)
-
 (use-package vterm
   :config
   (unbind-key "C-c C-t" vterm-mode-map)

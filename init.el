@@ -105,6 +105,8 @@
   (evil-define-key 'normal 'global (kbd "gi") 'lsp-find-implementation)
   (evil-define-key 'normal 'global (kbd "gd") 'lsp-find-definition)
   (evil-define-key 'normal 'global (kbd "gr") 'lsp-find-references)
+  (evil-define-key 'normal 'global (kbd "K") 'lsp-ui-doc-glance)
+  (evil-define-key 'normal 'global (kbd "E") 'flymake-goto-next-error)
   (evil-define-key 'emacs 'vterm-mode-map (kbd "C-<tab>") 'multi-vterm-next))
 
 (use-package ivy

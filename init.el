@@ -73,7 +73,7 @@
   (push (list "print-to-temp-buffer"
               (lambda (object)
                 (with-current-buffer (generate-new-buffer "*temp*")
-                  (insert-file object)
+                  (insert-file-contents object)
                   (switch-to-buffer-other-window (current-buffer)))))
         vterm-eval-cmds)
   (unbind-key "C-c C-t" vterm-mode-map)

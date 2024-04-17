@@ -70,6 +70,12 @@
 ;;; editor
 (use-package vterm
   :config
+  (push (list "print-to-temp-buffer"
+              (lambda (object)
+                (with-current-buffer (generate-new-buffer "*temp*")
+                  (insert-file object)
+                  (switch-to-buffer-other-window (current-buffer)))))
+        vterm-eval-cmds)
   (unbind-key "C-c C-t" vterm-mode-map)
   (unbind-key "C-c C-f" vterm-mode-map)
   (unbind-key "C-c C-g" vterm-mode-map))
@@ -120,9 +126,9 @@
   :config
   (counsel-mode))
 
-(use-package company
+(use-package corfu
   :config
-  (global-company-mode))
+  (global-corfu-mode))
 
 (use-package projectile
   :bind

@@ -173,7 +173,7 @@
 (menu-bar-mode -1)
 
 ;; reuse directory buffer
-(put 'dired-find-alternate-file 'disabled nil)
+(setq dired-kill-when-opening-new-dired-buffer t)
 
 ;; simplify y or n
 (defalias 'yes-or-no-p 'y-or-n-p)

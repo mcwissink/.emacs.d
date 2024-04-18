@@ -67,7 +67,6 @@
 
 (use-package lsp-ivy :commands lsp-ivy-workspace-symbol)
 
-;;; editor
 (use-package vterm
   :config
   (push (list "print-to-temp-buffer"
@@ -112,6 +111,7 @@
 (use-package ivy
   :bind
   ("C-s" . swiper)
+  ("C-<return>" . ivy-immediate-done)
   :config
   (ivy-mode 1))
 
@@ -144,7 +144,6 @@
   :bind
   ("C-c r" . vr/replace))
 
-;;; theme
 (use-package doom-themes
   :config
   (load-theme 'doom-homage-white))
@@ -180,12 +179,6 @@
 (setq-default typescript-ts-mode-indent-offset 4)
 (setq-default indent-tabs-mode nil)
 
-;;; CL
-;; (load (expand-file-name "~/.quicklisp/slime-helper.el"))
-;; (setq inferior-lisp-program "sbcl")
-
-
-;;; custom functions
 (defun copy-filename-to-clipboard ()
   "Copy the current buffer file name to the clipboard."
   (interactive)

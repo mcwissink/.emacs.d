@@ -1,5 +1,4 @@
-# Paste these methods in .bashrc
-
+# https://github.com/akermu/emacs-libvterm?tab=readme-ov-file#directory-tracking-and-prompt-tracking
 vterm_printf(){
     if [ -n "$TMUX" ] && ([ "${TERM%%-*}" = "tmux" ] || [ "${TERM%%-*}" = "screen" ] ); then
         # Tell tmux to pass the escape sequences through
@@ -29,6 +28,6 @@ vterm_cmd() {
 
 buffer() {
     tempfile="$(mktemp "emacs-stdin-$USER.XXXXXXX" --tmpdir)"
-    cat - > "$tempfile"
     vterm_cmd print-to-temp-buffer "$tempfile"
+    cat - > "$tempfile"
 }

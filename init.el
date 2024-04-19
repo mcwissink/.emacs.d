@@ -10,7 +10,6 @@
 ;; (setq ghub-use-workaround-for-emacs-bug 'force)
 
 ;; remove bindings
-(global-unset-key (kbd "C-z"))
 (global-unset-key (kbd "s-t"))
 (global-unset-key (kbd "s-p"))
 
@@ -128,6 +127,8 @@
   :config
   (counsel-mode))
 
+(use-package wgrep)
+
 (use-package corfu
   :config
   (global-corfu-mode))
@@ -173,7 +174,6 @@
 ;; fix large file performance problems
 (setq read-process-output-max (* 1024 1024))
 (setq gc-cons-threshold 100000000)
-
 
 (setq treesit-extra-load-path '("~/.emacs.d/languages"))
 (setq-default typescript-ts-mode-indent-offset 4)

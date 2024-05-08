@@ -1,31 +1,49 @@
-(require 'use-package-ensure)
-(setq use-package-always-ensure t)
+(use-package emacs
+  :demand t
+  :init
+  ;; bootstrap init files
+  (defun ensure-file (path path-callback)
+    (unless (file-exists-p path)
+      (with-temp-buffer (write-file path)))
+    (funcall path-callback path))
+  (ensure-file "~/.emacs.d/device.el" 'load)
+  (ensure-file "~/.emacs.d/custom.el"
+               (lambda (path)
+                 (setq custom-file path)
+                 (load custom-file)))
 
-;; remove bindings
-(global-unset-key (kbd "s-t"))
-(global-unset-key (kbd "s-p"))
-
-(defun ensure-file (path path-callback)
-  (unless (file-exists-p path)
-    (with-temp-buffer (write-file path)))
-  (funcall path-callback path))
-
-;;; bootstrap custom file
-(ensure-file
- "~/.emacs.d/custom.el"
- (lambda (path)
-   (setq custom-file path)
-   (load custom-file)))
-
-;;; bootstrap device file
-;; useful for any device specific configurations
-(ensure-file "~/.emacs.d/device.el" 'load)
-
-(setq package-archives
-  '(("gnu" . "https://elpa.gnu.org/packages/")
+  (global-auto-revert-mode 1)
+  (toggle-scroll-bar -1)
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+  (global-unset-key (kbd "s-t"))
+  (global-unset-key (kbd "s-p"))
+  ;; https://www.gnu.org/software/emacs/manual/html_node/eintr/Indent-Tabs-Mode.html
+  (setq-default indent-tabs-mode nil)
+  (defalias 'yes-or-no-p 'y-or-n-p)
+  :config
+  (defun copy-filename-to-clipboard ()
+    "Copy the current buffer file name to the clipboard."
+    (interactive)
+    (let ((filename (if (equal major-mode 'dired-mode) default-directory (buffer-file-name))))
+      (when filename
+        (kill-new filename)
+        (message "Copied buffer file name '%s' to the clipboard." filename))))
+  :custom
+  (use-package-always-ensure t)
+  (package-archives
+   '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
+  (treesit-extra-load-path '("~/.emacs.d/languages"))
+  (read-process-output-max (* 1024 1024))
+  (gc-cons-threshold 100000000)
+  (dired-kill-when-opening-new-dired-buffer t)
+  (initial-scratch-message nil)
+  (ring-bell-function 'ignore)
+  (make-backup-files nil)
+  (auto-save-default nil)
+  (create-lockfiles nil))
 
-;;; coding
 ;; lsp-mode is required until eglot supports multiple language servers for a single mode
 ;; https://github.com/minad/corfu/wiki#basic-example-configuration-with-orderless
 (use-package lsp-mode
@@ -39,8 +57,7 @@
     (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
           '(orderless)))
   :hook
-  ((tsx-ts-mode . lsp-deferred)
-   (typescript-ts-mode . lsp-deferred)
+  ((prog-mode . lsp-deferred)
    (lsp-completion-mode . my/lsp-completion-mode))
   :custom
   (lsp-auto-guess-root t)
@@ -62,6 +79,7 @@
   (unbind-key "C-c C-g" vterm-mode-map))
 
 (use-package multi-vterm
+  :after vterm
   :bind
   ("C-c C-t" . multi-vterm))
 
@@ -78,24 +96,28 @@
 (use-package evil
   :custom
   (evil-toggle-key "C-`")
+  (evil-want-keybinding nil)
   :config
   (evil-set-undo-system 'undo-tree)
-  (evil-set-initial-state 'vterm-mode 'emacs)
   (evil-mode 1)
   ;; custom evil bindings
+  (evil-define-key '(normal insert emacs) 'global (kbd "C-<tab>") 'multi-vterm-next)
+  (evil-define-key 'normal 'global (kbd "/") 'consult-line)
   (evil-define-key 'normal 'global (kbd "gi") 'lsp-find-implementation)
   (evil-define-key 'normal 'global (kbd "gd") 'lsp-find-definition)
   (evil-define-key 'normal 'global (kbd "gr") 'lsp-find-references)
   (evil-define-key 'normal 'global (kbd "K") 'lsp-ui-doc-glance)
-  (evil-define-key 'normal 'global (kbd "E") 'consult-flymake)
-  (evil-define-key 'emacs 'vterm-mode-map (kbd "C-<tab>") 'multi-vterm-next))
+  (evil-define-key 'normal 'global (kbd "E") 'consult-flymake))
+
+(use-package evil-collection
+  :config
+  (evil-collection-init))
 
 (use-package orderless
   :custom
   (completion-styles '(orderless basic)))
 
 (use-package marginalia
-  :ensure t
   :config
   (marginalia-mode))
 
@@ -106,9 +128,15 @@
 (use-package embark-consult)
 
 (use-package vertico
-  :init
+  :config
   (vertico-mode)
   :custom
+  (completion-in-region-function
+   (lambda (&rest args)
+     (apply (if vertico-mode
+                #'consult-completion-in-region
+              #'completion--in-region)
+            args)))
   (vertico-sort-function 'vertico-sort-alpha))
 
 (use-package consult
@@ -167,43 +195,9 @@
   :config
   (load-theme 'doom-homage-white))
 
-;; remove scratch message
-(setq initial-scratch-message nil)
-;; disable the awful bell sound
-(setq ring-bell-function 'ignore)
-;; reoad files when modified by external program
-(global-auto-revert-mode 1)
-;; disable backups
-(setq make-backup-files nil)
-(setq auto-save-default nil)
-(setq create-lockfiles nil)
-
-;; remove unnecessary emacs ui
-(toggle-scroll-bar -1)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-
-;; reuse directory buffer
-(setq dired-kill-when-opening-new-dired-buffer t)
-
-;; simplify y or n
-(defalias 'yes-or-no-p 'y-or-n-p)
-
-;; fix large file performance problems
-(setq read-process-output-max (* 1024 1024))
-(setq gc-cons-threshold 100000000)
-
-(setq treesit-extra-load-path '("~/.emacs.d/languages"))
-(setq-default typescript-ts-mode-indent-offset 4)
-(setq-default indent-tabs-mode nil)
-
-(defun copy-filename-to-clipboard ()
-  "Copy the current buffer file name to the clipboard."
-  (interactive)
-  (let ((filename (if (equal major-mode 'dired-mode) default-directory (buffer-file-name))))
-    (when filename
-      (kill-new filename)
-      (message "Copied buffer file name '%s' to the clipboard." filename))))
+(use-package typescript-ts-mode
+  :custom
+  (typescript-ts-mode-indent-offset 4))
 
 (provide 'init)
 ;;; init.el ends here

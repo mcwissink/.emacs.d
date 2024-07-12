@@ -62,6 +62,7 @@
   :custom
   (lsp-auto-guess-root t)
   (lsp-completion-provider :none)
+  (lsp-modeline-code-actions-mode nil)
   (lsp-headerline-breadcrumb-enable nil))
 
 (use-package lsp-ui :commands lsp-ui-mode)

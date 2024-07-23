@@ -60,6 +60,7 @@
   ((prog-mode . lsp-deferred)
    (lsp-completion-mode . my/lsp-completion-mode))
   :custom
+  (lsp-modeline-code-actions-enable nil)
   (lsp-auto-guess-root t)
   (lsp-completion-provider :none)
   (lsp-modeline-code-actions-mode nil)

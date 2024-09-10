@@ -29,6 +29,17 @@
       (when filename
         (kill-new filename)
         (message "Copied buffer file name '%s' to the clipboard." filename))))
+
+  ;; https://www.emacswiki.org/emacs/ExecuteExternalCommand
+  (defun shell-command-on-buffer ()
+    "Asks for a command and executes it in inferior shell with current buffer
+as input."
+    (interactive)
+    (shell-command-on-region
+     (point-min) (point-max)
+     (read-shell-command "Shell command on buffer: ") t t))
+  :bind
+  ("C-!" . shell-command-on-buffer))
   :custom
   (use-package-always-ensure t)
   (package-archives

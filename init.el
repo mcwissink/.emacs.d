@@ -16,6 +16,8 @@
   (toggle-scroll-bar -1)
   (tool-bar-mode -1)
   (menu-bar-mode -1)
+  (size-indication-mode 1)
+  (column-number-mode 1)
   (global-unset-key (kbd "s-t"))
   (global-unset-key (kbd "s-p"))
   ;; https://www.gnu.org/software/emacs/manual/html_node/eintr/Indent-Tabs-Mode.html
@@ -39,7 +41,7 @@ as input."
      (point-min) (point-max)
      (read-shell-command "Shell command on buffer: ") t t))
   :bind
-  ("C-!" . shell-command-on-buffer))
+  ("C-!" . shell-command-on-buffer)
   :custom
   (use-package-always-ensure t)
   (package-archives

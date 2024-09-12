@@ -27,7 +27,8 @@ vterm_cmd() {
 }
 
 buffer() {
-    tempfile="$(mktemp "emacs-stdin-$USER.XXXXXXX" --tmpdir)"
-    vterm_cmd print-to-temp-buffer "$tempfile"
-    cat - > "$tempfile"
+    tempfile=$(mktemp "emacs-stdin-$USER.XXXXXXX" --tmpdir)
+    if cat - > "$tempfile" && [ -s "$tempfile" ]; then
+        vterm_cmd print-to-temp-buffer "$tempfile"
+    fi
 }

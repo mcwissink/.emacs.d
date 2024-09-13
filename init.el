@@ -43,7 +43,6 @@ as input."
   :bind
   ("C-!" . shell-command-on-buffer)
   :custom
-  (use-package-always-ensure t)
   (package-archives
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
@@ -60,6 +59,7 @@ as input."
 ;; lsp-mode is required until eglot supports multiple language servers for a single mode
 ;; https://github.com/minad/corfu/wiki#basic-example-configuration-with-orderless
 (use-package lsp-mode
+  :ensure t
   :bind
   ("C-c C-a" . lsp-execute-code-action)
   ("C-c C-r" . lsp-rename)
@@ -79,9 +79,12 @@ as input."
   (lsp-modeline-code-actions-mode nil)
   (lsp-headerline-breadcrumb-enable nil))
 
-(use-package lsp-ui :commands lsp-ui-mode)
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
 
 (use-package vterm
+  :ensure t
   :config
   (push (list "print-to-temp-buffer"
               (lambda (object)
@@ -99,16 +102,19 @@ as input."
   ("C-c C-t" . multi-vterm))
 
 (use-package editorconfig
+  :ensure t
   :config
   (editorconfig-mode 1))
 
 (use-package undo-tree
+  :ensure t
   :custom
   (undo-tree-auto-save-history nil)
   :config
   (global-undo-tree-mode))
 
 (use-package evil
+  :ensure t
   :custom
   (evil-toggle-key "C-`")
   (evil-want-keybinding nil)
@@ -125,24 +131,30 @@ as input."
   (evil-define-key 'normal 'global (kbd "E") 'consult-flymake))
 
 (use-package evil-collection
+  :ensure t
   :config
   (evil-collection-init))
 
 (use-package orderless
+  :ensure t
   :custom
   (completion-styles '(orderless basic)))
 
 (use-package marginalia
+  :ensure t
   :config
   (marginalia-mode))
 
 (use-package embark
+  :ensure t
   :bind
   ("C-." . embark-act))
 
-(use-package embark-consult)
+(use-package embark-consult
+  :ensure t)
 
 (use-package vertico
+  :ensure t
   :config
   (vertico-mode)
   :custom
@@ -155,6 +167,7 @@ as input."
   (vertico-sort-function 'vertico-sort-alpha))
 
 (use-package consult
+  :ensure t
   :bind
   ("C-c C-g" . consult-ripgrep)
   ("C-x b" . consult-buffer)
@@ -163,18 +176,22 @@ as input."
   (setq xref-show-xrefs-function #'consult-xref)
   (setq xref-show-definitions-function #'consult-xref))
 
-(use-package wgrep)
+(use-package wgrep
+  :ensure t)
 
 (use-package corfu
+  :ensure t
   :custom
   (corfu-auto t)
   (corfu-cycle t)
   :config
   (global-corfu-mode))
 
-(use-package company)
+(use-package company
+  :ensure t)
 
 (use-package cape
+  :ensure t
   :init
   ;; Add to the global default value of `completion-at-point-functions' which is
   ;; used by `completion-at-point'.  The order of the functions matters, the
@@ -195,22 +212,27 @@ as input."
 )
 
 (use-package projectile
+  :ensure t
   :bind
   ("C-c C-f" . projectile-find-file)
   :config
   (projectile-mode))
 
-(use-package magit)
+(use-package magit
+  :ensure t)
 
 (use-package visual-regexp
+  :ensure t
   :bind
   ("C-c r" . vr/replace))
 
 (use-package doom-themes
+  :ensure t
   :config
   (load-theme 'doom-homage-white))
 
 (use-package typescript-ts-mode
+  :ensure t
   :custom
   (typescript-ts-mode-indent-offset 4))
 

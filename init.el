@@ -97,6 +97,7 @@ as input."
   (unbind-key "C-c C-g" vterm-mode-map))
 
 (use-package multi-vterm
+  :ensure t
   :after vterm
   :bind
   ("C-c C-t" . multi-vterm))

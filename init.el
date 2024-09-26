@@ -22,6 +22,7 @@
   (global-unset-key (kbd "s-p"))
   ;; https://www.gnu.org/software/emacs/manual/html_node/eintr/Indent-Tabs-Mode.html
   (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 2)
   (defalias 'yes-or-no-p 'y-or-n-p)
   :config
   (defun copy-filename-to-clipboard ()
@@ -43,6 +44,7 @@ as input."
   :bind
   ("C-!" . shell-command-on-buffer)
   :custom
+  (standard-indent 2)
   (package-archives
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
@@ -72,6 +74,9 @@ as input."
   :hook
   ((prog-mode . lsp-deferred)
    (lsp-completion-mode . my/lsp-completion-mode))
+  :config
+  (add-hook 'before-save-hook 'lsp-format-buffer)
+  (add-hook 'before-save-hook 'lsp-organize-imports)
   :custom
   (lsp-modeline-code-actions-enable nil)
   (lsp-auto-guess-root t)
@@ -235,7 +240,7 @@ as input."
 (use-package typescript-ts-mode
   :ensure t
   :custom
-  (typescript-ts-mode-indent-offset 4))
+  (typescript-ts-mode-indent-offset 2))
 
 (provide 'init)
 ;;; init.el ends here

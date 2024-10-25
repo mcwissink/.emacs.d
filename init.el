@@ -74,9 +74,6 @@ as input."
   :hook
   ((prog-mode . lsp-deferred)
    (lsp-completion-mode . my/lsp-completion-mode))
-  :config
-  (add-hook 'before-save-hook 'lsp-format-buffer)
-  (add-hook 'before-save-hook 'lsp-organize-imports)
   :custom
   (lsp-modeline-code-actions-enable nil)
   (lsp-auto-guess-root t)
@@ -242,5 +239,16 @@ as input."
   :custom
   (typescript-ts-mode-indent-offset 2))
 
+(use-package python
+  :config
+  (unbind-key "C-c C-f" python-mode-map))
+
+(use-package prettier-js
+  :ensure t
+  :hook
+  (tsx-ts-mode . prettier-js-mode)
+  (typescript-ts-mode . prettier-js-mode))
+
 (provide 'init)
 ;;; init.el ends here
+

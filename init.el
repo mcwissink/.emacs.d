@@ -13,6 +13,7 @@
                  (load custom-file)))
 
   (global-auto-revert-mode 1)
+  (global-display-line-numbers-mode 1)
   (toggle-scroll-bar -1)
   (tool-bar-mode -1)
   (menu-bar-mode -1)
@@ -22,9 +23,10 @@
   (global-unset-key (kbd "s-p"))
   ;; https://www.gnu.org/software/emacs/manual/html_node/eintr/Indent-Tabs-Mode.html
   (setq-default indent-tabs-mode nil)
-  (setq-default tab-width 2)
+  (setq-default tab-width 4)
   (defalias 'yes-or-no-p 'y-or-n-p)
   :config
+  (global-hl-line-mode)
   (defun copy-filename-to-clipboard ()
     "Copy the current buffer file name to the clipboard."
     (interactive)
@@ -44,7 +46,7 @@ as input."
   :bind
   ("C-!" . shell-command-on-buffer)
   :custom
-  (standard-indent 2)
+  (standard-indent 4)
   (package-archives
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
@@ -87,6 +89,7 @@ as input."
 
 (use-package vterm
   :ensure t
+  :hook (vterm-mode . (lambda () (setq-local global-hl-line-mode nil)))
   :config
   (push (list "print-to-temp-buffer"
               (lambda (object)
@@ -229,10 +232,14 @@ as input."
   :bind
   ("C-c r" . vr/replace))
 
+(use-package spacious-padding
+  :config
+  (spacious-padding-mode))
+
 (use-package doom-themes
   :ensure t
   :config
-  (load-theme 'doom-homage-white))
+  (load-theme 'doom-spacegrey))
 
 (use-package typescript-ts-mode
   :ensure t

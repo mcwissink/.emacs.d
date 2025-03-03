@@ -60,33 +60,6 @@ as input."
   (auto-save-default nil)
   (create-lockfiles nil))
 
-;; lsp-mode is required until eglot supports multiple language servers for a single mode
-;; https://github.com/minad/corfu/wiki#basic-example-configuration-with-orderless
-(use-package lsp-mode
-  :ensure t
-  :bind
-  ("C-c C-a" . lsp-execute-code-action)
-  ("C-c C-r" . lsp-rename)
-  :commands
-  lsp
-  :init
-  (defun my/lsp-completion-mode ()
-    (setf (alist-get 'styles (alist-get 'lsp-capf completion-category-defaults))
-          '(orderless)))
-  :hook
-  ((prog-mode . lsp-deferred)
-   (lsp-completion-mode . my/lsp-completion-mode))
-  :custom
-  (lsp-modeline-code-actions-enable nil)
-  (lsp-auto-guess-root t)
-  (lsp-completion-provider :none)
-  (lsp-modeline-code-actions-mode nil)
-  (lsp-headerline-breadcrumb-enable nil))
-
-(use-package lsp-ui
-  :ensure t
-  :commands lsp-ui-mode)
-
 (use-package vterm
   :ensure t
   :hook (vterm-mode . (lambda () (setq-local global-hl-line-mode nil)))
@@ -119,6 +92,11 @@ as input."
   :config
   (global-undo-tree-mode))
 
+(use-package evil-collection
+  :ensure t
+  :config
+  (evil-collection-init))
+
 (use-package evil
   :ensure t
   :custom
@@ -130,16 +108,7 @@ as input."
   ;; custom evil bindings
   (evil-define-key '(normal insert emacs) 'global (kbd "C-<tab>") 'multi-vterm-next)
   (evil-define-key 'normal 'global (kbd "/") 'consult-line)
-  (evil-define-key 'normal 'global (kbd "gi") 'lsp-find-implementation)
-  (evil-define-key 'normal 'global (kbd "gd") 'lsp-find-definition)
-  (evil-define-key 'normal 'global (kbd "gr") 'lsp-find-references)
-  (evil-define-key 'normal 'global (kbd "K") 'lsp-ui-doc-glance)
   (evil-define-key 'normal 'global (kbd "E") 'consult-flymake))
-
-(use-package evil-collection
-  :ensure t
-  :config
-  (evil-collection-init))
 
 (use-package orderless
   :ensure t
@@ -255,6 +224,13 @@ as input."
   :hook
   (tsx-ts-mode . prettier-js-mode)
   (typescript-ts-mode . prettier-js-mode))
+
+(use-package eglot
+  :config
+  (setq-default eglot-workspace-configuration
+                '(:pylsp (:plugins (:pycodestyle (:enabled :json-false)))))
+  :hook
+  (prog-mode . eglot-ensure))
 
 (provide 'init)
 ;;; init.el ends here

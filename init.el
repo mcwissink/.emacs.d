@@ -92,16 +92,13 @@ as input."
   :config
   (global-undo-tree-mode))
 
-(use-package evil-collection
-  :ensure t
-  :config
-  (evil-collection-init))
-
 (use-package evil
   :ensure t
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
   :custom
   (evil-toggle-key "C-`")
-  (evil-want-keybinding nil)
   :config
   (evil-set-undo-system 'undo-tree)
   (evil-mode 1)
@@ -109,6 +106,11 @@ as input."
   (evil-define-key '(normal insert emacs) 'global (kbd "C-<tab>") 'multi-vterm-next)
   (evil-define-key 'normal 'global (kbd "/") 'consult-line)
   (evil-define-key 'normal 'global (kbd "E") 'consult-flymake))
+
+(use-package evil-collection
+  :ensure t
+  :config
+  (evil-collection-init))
 
 (use-package orderless
   :ensure t
@@ -208,7 +210,7 @@ as input."
 (use-package doom-themes
   :ensure t
   :config
-  (load-theme 'doom-spacegrey))
+  (load-theme 'doom-opera-light))
 
 (use-package typescript-ts-mode
   :ensure t
@@ -228,7 +230,10 @@ as input."
 (use-package eglot
   :config
   (setq-default eglot-workspace-configuration
-                '(:pylsp (:plugins (:pycodestyle (:enabled :json-false)))))
+                '(:pylsp (:plugins (:flake8 (:enabled t)
+                                            :autopep8 (:enabled :json-false)
+                                            :yapf (:enabled :json-false)
+                                            :pycodestyle (:enabled :json-false)))))
   :hook
   (prog-mode . eglot-ensure))
 

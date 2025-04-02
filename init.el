@@ -69,16 +69,11 @@ as input."
                 (with-current-buffer (generate-new-buffer "*temp*")
                   (insert-file-contents object)
                   (switch-to-buffer-other-window (current-buffer)))))
-        vterm-eval-cmds)
-  (unbind-key "C-c C-t" vterm-mode-map)
-  (unbind-key "C-c C-f" vterm-mode-map)
-  (unbind-key "C-c C-g" vterm-mode-map))
+        vterm-eval-cmds))
 
 (use-package multi-vterm
   :ensure t
-  :after vterm
-  :bind
-  ("C-c C-t" . multi-vterm))
+  :after vterm)
 
 (use-package editorconfig
   :ensure t
@@ -100,16 +95,28 @@ as input."
   :custom
   (evil-toggle-key "C-`")
   :config
-  (evil-set-undo-system 'undo-tree)
-  (evil-mode 1)
+  (evil-set-leader 'normal (kbd "<SPC>"))
   ;; custom evil bindings
   (evil-define-key '(normal insert emacs) 'global (kbd "C-<tab>") 'multi-vterm-next)
-  (evil-define-key 'normal 'global (kbd "/") 'consult-line)
-  (evil-define-key 'normal 'global (kbd "E") 'consult-flymake))
+  (evil-define-key '(normal visual) 'global (kbd "/") 'consult-line)
+  (evil-define-key '(normal visual) 'global (kbd "<leader>f") 'project-find-file)
+  (evil-define-key 'normal 'global (kbd "<leader>d") 'find-file)
+  (evil-define-key 'normal 'global (kbd "<leader>k") 'kill-buffer)
+  (evil-define-key 'normal 'global (kbd "<leader>t") 'multi-vterm)
+  (evil-define-key 'normal 'global (kbd "<leader>b") 'consult-buffer)
+  (evil-define-key 'normal 'global (kbd "<leader>g") 'consult-ripgrep)
+  (evil-define-key 'normal 'global (kbd "<leader>o") 'other-window)
+  (evil-define-key 'normal 'global (kbd "<leader>r") 'vr/replace)
+  (evil-define-key 'normal 'global (kbd "<leader>s") 'save-some-buffers)
+  (evil-define-key 'normal 'global (kbd "<leader>x") 'execute-extended-command)
+  (evil-define-key 'normal 'global (kbd "E") 'consult-flymake)
+  (evil-set-undo-system 'undo-tree)
+  (evil-mode 1))
 
 (use-package evil-collection
   :ensure t
   :config
+  (setq evil-collection-key-blacklist '("<SPC>"))
   (evil-collection-init))
 
 (use-package orderless
@@ -145,10 +152,6 @@ as input."
 
 (use-package consult
   :ensure t
-  :bind
-  ("C-c C-g" . consult-ripgrep)
-  ("C-x b" . consult-buffer)
-  ("C-s" . consult-line)
   :init
   (setq xref-show-xrefs-function #'consult-xref)
   (setq xref-show-definitions-function #'consult-xref))
@@ -190,8 +193,6 @@ as input."
 
 (use-package projectile
   :ensure t
-  :bind
-  ("C-c C-f" . projectile-find-file)
   :config
   (projectile-mode))
 
@@ -199,9 +200,7 @@ as input."
   :ensure t)
 
 (use-package visual-regexp
-  :ensure t
-  :bind
-  ("C-c r" . vr/replace))
+  :ensure t)
 
 (use-package spacious-padding
   :config
@@ -216,10 +215,6 @@ as input."
   :ensure t
   :custom
   (typescript-ts-mode-indent-offset 2))
-
-(use-package python
-  :config
-  (unbind-key "C-c C-f" python-mode-map))
 
 (use-package prettier-js
   :ensure t

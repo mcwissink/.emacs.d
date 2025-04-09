@@ -109,6 +109,10 @@ as input."
   (evil-define-key 'normal 'global (kbd "<leader>r") 'vr/replace)
   (evil-define-key 'normal 'global (kbd "<leader>s") 'save-some-buffers)
   (evil-define-key 'normal 'global (kbd "<leader>x") 'execute-extended-command)
+  (evil-define-key 'normal 'global (kbd "<leader>0") 'delete-window)
+  (evil-define-key 'normal 'global (kbd "<leader>1") 'delete-other-windows)
+  (evil-define-key 'normal 'global (kbd "<leader>2") 'split-window-below)
+  (evil-define-key 'normal 'global (kbd "<leader>3") 'split-window-right)
   (evil-define-key 'normal 'global (kbd "E") 'consult-flymake)
   (evil-set-undo-system 'undo-tree)
   (evil-mode 1))
@@ -223,12 +227,6 @@ as input."
   (typescript-ts-mode . prettier-js-mode))
 
 (use-package eglot
-  :config
-  (setq-default eglot-workspace-configuration
-                '(:pylsp (:plugins (:flake8 (:enabled t)
-                                            :autopep8 (:enabled :json-false)
-                                            :yapf (:enabled :json-false)
-                                            :pycodestyle (:enabled :json-false)))))
   :hook
   (prog-mode . eglot-ensure))
 

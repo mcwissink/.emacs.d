@@ -98,8 +98,9 @@ as input."
   (evil-set-leader 'normal (kbd "<SPC>"))
   ;; custom evil bindings
   (evil-define-key '(normal insert emacs) 'global (kbd "C-<tab>") 'multi-vterm-next)
-  (evil-define-key '(normal visual) 'global (kbd "/") 'consult-line)
-  (evil-define-key '(normal visual) 'global (kbd "<leader>f") 'project-find-file)
+  (evil-define-key 'normal 'global (kbd "/") 'consult-line)
+  (evil-define-key 'normal 'global (kbd "<leader>f") 'project-find-file)
+  (evil-define-key 'normal 'global (kbd "<leader>a") 'eglot-code-actions)
   (evil-define-key 'normal 'global (kbd "<leader>d") 'find-file)
   (evil-define-key 'normal 'global (kbd "<leader>k") 'kill-buffer)
   (evil-define-key 'normal 'global (kbd "<leader>t") 'multi-vterm)
@@ -205,10 +206,6 @@ as input."
 
 (use-package visual-regexp
   :ensure t)
-
-(use-package spacious-padding
-  :config
-  (spacious-padding-mode))
 
 (use-package doom-themes
   :ensure t

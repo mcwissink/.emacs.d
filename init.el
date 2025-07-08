@@ -210,7 +210,7 @@ as input."
 (use-package doom-themes
   :ensure t
   :config
-  (load-theme 'doom-opera-light))
+  (load-theme 'leuven-dark))
 
 (use-package typescript-ts-mode
   :ensure t
